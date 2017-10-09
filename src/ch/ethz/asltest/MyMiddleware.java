@@ -10,8 +10,13 @@ import java.util.List;
 
 public class MyMiddleware{
 
-    private ServerSocket serverSocket;
-    private int middlewarePort;
+    private ServerSocket mySocket;
+
+    private String myIp;
+    private int myPort;
+    private List<String> mcAddresses;
+    private int numThreadsPTP;
+    private boolean readSharded;
 
 
     // private List<ClientHandler> clientHandlerList;
@@ -22,12 +27,16 @@ public class MyMiddleware{
 
     public MyMiddleware(String myIp, int myPort, List<String> mcAddresses, int numThreadsPTP, boolean readSharded)
     {
-
+        this.myIp = myIp;
+        this.myPort = myPort;
+        this.mcAddresses = mcAddresses;
+        this.numThreadsPTP = numThreadsPTP;
+        this.readSharded = readSharded;
     }
 
     public void run() {
         try {
-            serverSocket = new ServerSocket(middlewarePort);
+            mySocket = new ServerSocket(myPort);
             System.out.println("Listening ...");
             while (true) {
                 /*
@@ -36,7 +45,7 @@ public class MyMiddleware{
                     clientHandlerList.add(newClientHandler);
                     newClientHandler.start();
                 */
-                new ClientHandler(serverSocket.accept()).start();
+                new ClientHandler(mySocket.accept()).start();
             }
         } catch (IOException e) {
             System.out.println("Oh crap.");
@@ -44,19 +53,15 @@ public class MyMiddleware{
         } finally {
             stop();
         }
-
     }
 
     public void stop() {
         try {
-            serverSocket.close();
+            mySocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
-
 
 
     private static class ClientHandler extends Thread {

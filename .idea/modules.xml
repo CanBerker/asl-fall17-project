@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ASL_Project_v1.iml" filepath="$PROJECT_DIR$/ASL_Project_v1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asl-fall17-project.iml" filepath="$PROJECT_DIR$/asl-fall17-project.iml" />
     </modules>
   </component>
 </project>
