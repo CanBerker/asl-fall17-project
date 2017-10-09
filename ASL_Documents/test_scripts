@@ -1,0 +1,4 @@
+memtier_benchmark --port=11211 --protocol=memcache_text --ratio=0:1 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=5 --clients=50 --threads=4
+
+memcached -p 11211
+
