@@ -33,7 +33,7 @@ Start server with custom port(addtional configuration might be needed):
 memcached -p 11211
 ```
 
-Memcached and memtier example using terminal can be found in the following link:
+Memcached and memtier example using terminal can be found in the following link:  
 https://www.kutukupret.com/2011/05/05/memcached-in-a-shell-using-nc-and-echo/
 
 
