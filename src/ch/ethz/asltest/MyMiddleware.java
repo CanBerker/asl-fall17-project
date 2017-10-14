@@ -6,29 +6,28 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MyMiddleware{
 
-    private ServerSocket mySocket;
+public class MyMiddleware {
+
+    private ServerSocket networkSocket;
 
     private String myIp;
-    private int myPort;
+    private int networkPort;
     private List<String> mcAddresses;
     private int numThreadsPTP;
     private boolean readSharded;
 
 
-    // private List<ClientHandler> clientHandlerList;
-
     public MyMiddleware() {
-        // clientHandlerList = new ArrayList<>();
     }
 
-    public MyMiddleware(String myIp, int myPort, List<String> mcAddresses, int numThreadsPTP, boolean readSharded)
+    public MyMiddleware(String myIp, int networkPort, List<String> mcAddresses, int numThreadsPTP, boolean readSharded)
     {
         this.myIp = myIp;
-        this.myPort = myPort;
+        this.networkPort = networkPort;
         this.mcAddresses = mcAddresses;
         this.numThreadsPTP = numThreadsPTP;
         this.readSharded = readSharded;
@@ -36,33 +35,63 @@ public class MyMiddleware{
 
     public void run() {
         try {
-            mySocket = new ServerSocket(myPort);
-            System.out.println("Listening ...");
-            while (true) {
-                /*
-                    TODO: Uncomment if/when notification is necessary
-                    ClientHandler newClientHandler = new ClientHandler(serverSocket.accept());
-                    clientHandlerList.add(newClientHandler);
-                    newClientHandler.start();
-                */
-                new ClientHandler(mySocket.accept()).start();
-            }
-        } catch (IOException e) {
-            System.out.println("Oh crap.");
+            new NetworkThread(networkPort).start();
+            // startWorkerThreads(numThreadsPTP);
+
+
+        } catch (Exception e) {
+
             e.printStackTrace();
         } finally {
-            stop();
+
         }
     }
 
-    public void stop() {
-        try {
-            mySocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+
+    private static class NetworkThread extends Thread {
+
+        private int networkPort;
+        private ServerSocket networkSocket;
+
+        private List<ClientHandler> clientHandlerList;
+
+        public NetworkThread(int networkPort)
+        {
+            this.networkPort = networkPort;
+            this.clientHandlerList = new ArrayList<>();
+        }
+
+        public void run() {
+            try {
+                networkSocket = new ServerSocket(networkPort);
+                System.out.println("Listening ...");
+                while (true) {
+                    ClientHandler newClientHandler = new ClientHandler(networkSocket.accept());
+                    clientHandlerList.add(newClientHandler);
+                    newClientHandler.start();
+                }
+            } catch (IOException e) {
+                System.out.println("Oh crap.");
+                e.printStackTrace();
+            } finally {
+                closeSocket();
+            }
+        }
+
+        public void closeSocket() {
+            try {
+                networkSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        public List<ClientHandler> getClientHandlerList() {
+            return clientHandlerList;
         }
     }
-
 
     private static class ClientHandler extends Thread {
         private Socket clientSocket;
