@@ -1,4 +1,4 @@
-# ASL_Project_v1
+# asl-fall17-project
 
 ASL_Documents has the original project documents.
 
