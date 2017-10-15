@@ -21,7 +21,7 @@ public class MyMiddleware {
     protected int networkPort;
     protected static List<String> mcAddresses;
     protected int numThreadsPTP;
-    protected boolean readSharded;
+    protected static boolean readSharded;
 
     protected static NetworkThread netThread;
     protected static List<ClientHandler> clientHandlers;
@@ -126,11 +126,27 @@ public class MyMiddleware {
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));      // define input of socket to read the request of the client
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                    Request request = new Request(clientID, inputLine);
+                    // SET format   -- sends a MESSAGE(multiple fields seperated by whitespace) and a PAYLOAD
+                    // <command name> <key> <flags> <exptime> <bytes> [noreply]\r\n
+                    // <data block>\r\n
+
+                    // GET format   -- sends a MESSAGE(single key or multiple seperated by whitespace)
+                    // get <key>*\r\n
+
+                    String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
+                    String requestType = requestParts[0];
+
+                    Request request;
+                    if (requestType.equals("get")){
+                        request = new Request(clientID, inputLine, "GET");
+                    } else {
+                        // read the payload line
+                        String payload = in.readLine();
+                        request = new Request(clientID, inputLine, "SET", payload);
+                    }
+
                     requestsQueue.add(request);
                 }
-
-
             } catch (IOException e) {
                 System.out.println("LOG: ClientHandler: Reading from socket stream failed.");
                 e.printStackTrace();
@@ -175,7 +191,7 @@ public class MyMiddleware {
                 this.serverWriters = new ArrayList<>();
                 this.serverReaders = new ArrayList<>();
                 for (String address : mcAddresses) {
-                    String[] addressParts = address.split(":");       // split the IP and port values at ":"
+                    String[] addressParts = address.split(":", 2);       // split the IP and port values at the first ":" (limit:2)
                     String ip = addressParts[0];
                     int port = Integer.parseInt(addressParts[1]);           // cast port to integer
 
@@ -194,37 +210,106 @@ public class MyMiddleware {
             }
         }
 
-        public void run() {
+        // TODO: Implement functions below
+
+
+        // TODO: Handle the multi-line structure of set request ????
+        // SET -- forwarded to all servers
+        public String setOperation(String message, String payload) {
             try {
+                // Forward the SET request to all servers
+                for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
+                    // TODO: Design Question: (Write + Read) x3 OR Write x3 + Read x3
+                    serverWriters.get(serverIndex).println(message + "\r");           // forward message to server (\r is used instead of \r\n due to println function)
+                    serverWriters.get(serverIndex).println(payload + "\r");           // forward payload to server
+                    String serverResponse = serverReaders.get(serverIndex).readLine();  // read server's response
+                    // if a server has failed to store the value
+                    if (!serverResponse.equals("STORED")) {
+                        return serverResponse;
+                    }
+                }
+                // if execution reaches here, values were stored successfully
+                return "STORED";
+            }  catch (IOException e) {
+                System.out.println("LOG: Worker Thread - Set Operation : Error occurred during read/write operation with server socket.");
+                e.printStackTrace();
+                return "EXCEPTION";
+            }
+        }
 
-                Request request;
-                int roundRobinServerIndex = 0;      // server index for round robin load balancing
-                while((request = requestsQueue.take()) != null)     // read the next request from the requests queue
-                {
-                    int clientID = request.getClientID();       // get the ID of the client who has sent the request
+        // GET -- sent to only one server if (sharding == false)
+        public String getOperation(String message, int roundRobinServerIndex) {
+            try {
+                // Forward the GET request to the server with the given round robin index
+                serverWriters.get(roundRobinServerIndex).println(message);      // forward request to server
+                String serverResponse;      // read server's response until END string is found
+                while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null && serverResponse.equals("END\r\n")) {
 
-                    // TODO: determine the operation with request type and parameters
-
-                    // TODO: forward the request's message to server
-                    serverWriters.get(roundRobinServerIndex).println(request.getMessage());
-
-                    // TODO: read response from server
-                    String serverResponse = serverReaders.get(roundRobinServerIndex).readLine();
-
-                    // TODO: parse the response in the case of sharded operations
-
-
-                    // TODO: forward the response to the client
-                    clientHandlers.get(clientID).out.println(serverResponse);
-
-                    roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();      // increment the round robin index and take modulo with number of servers
                 }
 
 
-
-            } catch (IOException e) {
-                System.out.println("LOG: Worker Thread: Error occurred during read/write operation with server socket.");
+                // if execution reaches here, values were stored successfully
+                return "STORED";
+            }  catch (IOException e) {
+                System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
                 e.printStackTrace();
+                return "EXCEPTION";
+            }
+        }
+
+        // multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
+        public String multiGetOperation(String message, int roundRobinServerIndex) {
+            return "test";
+        }
+
+
+        public void run() {
+            try {
+                Request request;
+                int roundRobinServerIndex = 0;      // server index for round robin load balancing
+                while ((request = requestsQueue.take()) != null)     // read the next request from the requests queue
+                {
+                    int clientID = request.getClientID();       // get the ID of the client who has sent the request
+                    String message = request.getMessage();      // get the original request of memtier (client)
+                    String requestType = request.getRequestType();
+
+                    String serverResponse = "";
+
+                    // use requestType to determine the action to take
+                    if (requestType.equals("SET")) {
+                        serverResponse = setOperation(message, request.getPayload());
+                    } else if (requestType.equals("GET")) {
+                        if (readSharded == false) {
+                            serverResponse = getOperation(message, roundRobinServerIndex);
+                        } else {
+                            String[] messageParts = message.split(" ", 2);        // split the message at the first space
+                            String keys = messageParts[1];                                    // second half are keys
+                            String[] keysArray = keys.split(" ");                       // split keys on " " and take action based on number of keys
+                            if (keysArray.length == 1) {
+                                serverResponse = getOperation(message, roundRobinServerIndex);
+                            } else {
+                                // TODO: Don't forget to synch. the increment in round robin index during the multi-get operation
+                                serverResponse = multiGetOperation(message, roundRobinServerIndex);
+                            }
+                        }
+                    } else {
+                        // refuse unrecognized requestType
+                        System.out.println("Unrecognized Command. Waiting for a newline to reinitialize.");
+                        // TODO: Log the unrecognized command
+                        // TODO: Discard all input until a newline arrives.
+                    }
+
+                    // if a proper client request command is found and an according response is received from the server
+                    if (!serverResponse.equals("")) {
+                        // TODO: forward the response to the client
+                        // TODO: Handle the return of "EXCEPTION" as serverResponse
+                        clientHandlers.get(clientID).out.println(serverResponse + "\r");
+
+                        // increment the round robin index and take modulo with number of servers
+                        roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();
+                    }
+                }
+
             } catch (InterruptedException e) {
                 System.out.println("LOG: Worker Thread: Error while reading from the requests queue.");
                 e.printStackTrace();

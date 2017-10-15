@@ -11,12 +11,12 @@ https://github.com/RedisLabs/memtier_benchmark/
 
 * Run the benchmark tool with:
 
-	* Only sets:  
+	* Only gets:
 	```
 	memtier_benchmark --port=11211 --protocol=memcache_text --ratio=0:1 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=5 --clients=50 --threads=4
 	```
 
-	* Only gets:  
+	* Only sets:
 	```
 	memtier_benchmark --port=11211 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=1 --clients=1 --threads=1
 	```
@@ -28,9 +28,9 @@ https://github.com/RedisLabs/memtier_benchmark/
 
 
 
-Start server with custom port(addtional configuration might be needed):  
+Start server with custom port and verbose mode:
 ```
-memcached -p 11211
+memcached -p 11211 -vv
 ```
 
 Memcached and memtier example using terminal can be found in the following link:  
