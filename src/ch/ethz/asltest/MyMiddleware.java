@@ -211,9 +211,6 @@ public class MyMiddleware {
         }
 
         // TODO: Implement functions below
-
-
-        // TODO: Handle the multi-line structure of set request ????
         // SET -- forwarded to all servers
         public String setOperation(String message, String payload) {
             try {
@@ -242,19 +239,19 @@ public class MyMiddleware {
             try {
                 // Forward the GET request to the server with the given round robin index
                 serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server
-                List<String> serverResponse = new ArrayList<>();      // read server's response until END string is found
-                String serverResponseLine;
-                while ((serverResponseLine = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
-                    serverResponse.add(serverResponseLine);
-                    if (serverResponseLine.equals("END")) {
-                        // append the "END" command to the server responses and break the while loop
+                String serverResponse;
+                StringBuilder builder = new StringBuilder();
+                while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
+                    builder.append(serverResponse);
+                    // append responses until "END" message is received
+                    if (!serverResponse.equals("END")) {
+                        builder.append("\r\n");
+                    }
+                    else {
                         break;
                     }
                 }
-
-
-                // if execution reaches here, values were stored successfully
-                return "STORED";
+                return builder.toString();
             }  catch (IOException e) {
                 System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
                 e.printStackTrace();
