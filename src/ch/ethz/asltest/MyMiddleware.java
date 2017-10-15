@@ -24,7 +24,8 @@ public class MyMiddleware {
     protected boolean readSharded;
 
     protected static NetworkThread netThread;
-    protected static BlockingQueue<String> requestsQueue;
+    protected static List<ClientHandler> clientHandlers;
+    protected static BlockingQueue<Request> requestsQueue;
     protected List<WorkerThread> workerThreads;
 
 
@@ -40,6 +41,7 @@ public class MyMiddleware {
         this.readSharded = readSharded;
 
         this.netThread = new NetworkThread(networkPort);
+        this.clientHandlers = new ArrayList<>();
         this.requestsQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
@@ -62,12 +64,9 @@ public class MyMiddleware {
         private int networkPort;
         private ServerSocket networkSocket;
 
-        private List<ClientHandler> clientHandlerList;
-
         public NetworkThread(int networkPort)
         {
             this.networkPort = networkPort;
-            this.clientHandlerList = new ArrayList<>();
         }
 
         public void run() {
@@ -76,7 +75,7 @@ public class MyMiddleware {
                 System.out.println("Listening ...");
                 while (true) {
                     ClientHandler newClientHandler = new ClientHandler(networkSocket.accept());
-                    clientHandlerList.add(newClientHandler);
+                    clientHandlers.add(newClientHandler);
                     newClientHandler.start();
                 }
             } catch (IOException e) {
@@ -95,10 +94,6 @@ public class MyMiddleware {
                 e.printStackTrace();
             }
         }
-
-        public List<ClientHandler> getClientHandlerList() {
-            return clientHandlerList;
-        }
     }
 
     private static class ClientHandler extends Thread {
@@ -106,6 +101,7 @@ public class MyMiddleware {
         private PrintWriter out;
         private BufferedReader in;
         private static int activeUserCount = 0;
+        private int clientID = 0;
 
         public ClientHandler(Socket socket) {
             this.clientSocket = socket;
@@ -122,18 +118,21 @@ public class MyMiddleware {
         public void run() {
 
             System.out.println("Client connected!");
+            clientID = activeUserCount;
             incrementUserCount();
 
             try {
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                out = new PrintWriter(clientSocket.getOutputStream(), true);        // define the output of socket to send serverResponse in the workerThread
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));      // define input of socket to read the request of the client
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                    requestsQueue.add(inputLine);
+                    Request request = new Request(clientID, inputLine);
+                    requestsQueue.add(request);
                 }
 
 
             } catch (IOException e) {
-                System.out.println("LOG: ClientHandlder: Reading from socket stream failed.");
+                System.out.println("LOG: ClientHandler: Reading from socket stream failed.");
                 e.printStackTrace();
             } catch (IllegalStateException e) {
                 System.out.println("LOG: ClientHandler: Insertion to request queue failed.");
@@ -144,12 +143,12 @@ public class MyMiddleware {
         }
 
         private void closeThread () {
-            try
-            {
+            try {
                 in.close();
+                out.close();
                 clientSocket.close();
             } catch (IOException e) {
-                System.out.println("LOG: ClientHandler: Error while closing readers or sockets.");
+                System.out.println("LOG: ClientHandler: Error while closing readers, writers or sockets.");
                 e.printStackTrace();
             }
         }
@@ -176,9 +175,9 @@ public class MyMiddleware {
                 this.serverWriters = new ArrayList<>();
                 this.serverReaders = new ArrayList<>();
                 for (String address : mcAddresses) {
-                    String[] addressParts = address.split(":");     // split the IP and port values at ":"
+                    String[] addressParts = address.split(":");       // split the IP and port values at ":"
                     String ip = addressParts[0];
-                    int port = Integer.parseInt(addressParts[1]);       // cast port to integer
+                    int port = Integer.parseInt(addressParts[1]);           // cast port to integer
 
                     System.out.println(ip + " " + port);
 
@@ -198,26 +197,27 @@ public class MyMiddleware {
         public void run() {
             try {
 
-                String request;
-                int roundRobinIndex = 0;
-                while((request = requestsQueue.take()) != null)
+                Request request;
+                int roundRobinServerIndex = 0;      // server index for round robin load balancing
+                while((request = requestsQueue.take()) != null)     // read the next request from the requests queue
                 {
-                    // TODO: forward the request to server
+                    int clientID = request.getClientID();       // get the ID of the client who has sent the request
+
+                    // TODO: determine the operation with request type and parameters
+
+                    // TODO: forward the request's message to server
+                    serverWriters.get(roundRobinServerIndex).println(request.getMessage());
+
                     // TODO: read response from server
+                    String serverResponse = serverReaders.get(roundRobinServerIndex).readLine();
+
+                    // TODO: parse the response in the case of sharded operations
+
+
                     // TODO: forward the response to the client
+                    clientHandlers.get(clientID).out.println(serverResponse);
 
-
-                    // serverWriters.get(roundRobinIndex).println();
-
-                    String inputLine;
-                    while ((inputLine = serverReaders.get(roundRobinIndex).readLine()) != null) {
-                        // Log the client text
-                        System.out.println("A client said the following:" + "\t" + inputLine);
-
-                    }
-
-
-                    roundRobinIndex = (roundRobinIndex + 1) % mcAddresses.size();      // increment the round robin index and take modulo with number of servers
+                    roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();      // increment the round robin index and take modulo with number of servers
                 }
 
 
@@ -234,8 +234,7 @@ public class MyMiddleware {
         }
 
         private void closeThread () {
-            try
-            {
+            try {
                 for (int arrayIndex = 0; arrayIndex < serverSockets.size(); arrayIndex++) {
                     serverReaders.get(arrayIndex).close();
                     serverWriters.get(arrayIndex).close();
