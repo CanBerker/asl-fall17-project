@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,7 +12,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="388">
@@ -33,7 +30,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Request.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Request.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="224">
@@ -515,6 +512,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="21" column="8" lean-forward="false" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
+          <folding>
+            <element signature="method#Request#0;class#Request#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="388">
@@ -527,16 +534,6 @@
             <element signature="e#3201#3202#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="21" column="8" lean-forward="false" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-          <folding>
-            <element signature="method#Request#0;class#Request#0" expanded="false" />
           </folding>
         </state>
       </provider>
