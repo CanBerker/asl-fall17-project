@@ -210,7 +210,7 @@ public class MyMiddleware {
             }
         }
 
-        // TODO: Implement functions below
+
         // SET -- forwarded to all servers
         public String setOperation(String message, String payload) {
             try {
@@ -259,9 +259,30 @@ public class MyMiddleware {
             }
         }
 
+        // TODO: Implement multi-GET operation
         // multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
         public String multiGetOperation(String message, int roundRobinServerIndex) {
-            return "test";
+            try {
+                // Forward the GET request to the server with the given round robin index
+                serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server
+                String serverResponse;
+                StringBuilder builder = new StringBuilder();
+                while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
+                    builder.append(serverResponse);
+                    // append responses until "END" message is received
+                    if (!serverResponse.equals("END")) {
+                        builder.append("\r\n");
+                    }
+                    else {
+                        break;
+                    }
+                }
+                return builder.toString();
+            }  catch (IOException e) {
+                System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
+                e.printStackTrace();
+                return "EXCEPTION";
+            }
         }
 
 

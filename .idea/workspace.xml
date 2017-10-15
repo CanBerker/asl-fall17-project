@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -17,8 +18,8 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="316" column="36" lean-forward="true" selection-start-line="316" selection-start-column="36" selection-end-line="316" selection-end-column="36" />
+            <state relative-caret-position="14">
+              <caret line="261" column="46" lean-forward="false" selection-start-line="261" selection-start-column="46" selection-end-line="261" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -26,8 +27,8 @@
                 <element signature="e#3158#3159#0" expanded="true" />
                 <element signature="e#3208#3209#0" expanded="true" />
                 <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-                <element signature="e#10246#10247#0" expanded="true" />
-                <element signature="e#10283#10284#0" expanded="true" />
+                <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
               </folding>
             </state>
@@ -363,7 +364,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39928487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39928487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -431,8 +432,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10246#10247#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
+            <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -457,8 +458,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10246#10247#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
+            <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -491,8 +492,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10246#10247#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
+            <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -509,8 +510,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10246#10247#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
+            <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -560,8 +561,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="316" column="36" lean-forward="true" selection-start-line="316" selection-start-column="36" selection-end-line="316" selection-end-column="36" />
+        <state relative-caret-position="14">
+          <caret line="261" column="46" lean-forward="false" selection-start-line="261" selection-start-column="46" selection-end-line="261" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -569,8 +570,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10246#10247#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
+            <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
