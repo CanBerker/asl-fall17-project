@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +17,8 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="293" column="23" lean-forward="false" selection-start-line="293" selection-start-column="23" selection-end-line="293" selection-end-column="23" />
+            <state relative-caret-position="292">
+              <caret line="226" column="47" lean-forward="false" selection-start-line="226" selection-start-column="47" selection-end-line="226" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -29,8 +26,8 @@
                 <element signature="e#3158#3159#0" expanded="true" />
                 <element signature="e#3208#3209#0" expanded="true" />
                 <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-                <element signature="e#10177#10178#0" expanded="true" />
-                <element signature="e#10214#10215#0" expanded="true" />
+                <element signature="e#10399#10400#0" expanded="true" />
+                <element signature="e#10436#10437#0" expanded="true" />
                 <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
               </folding>
             </state>
@@ -112,8 +109,8 @@
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/RequestQueue.java" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
-        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
       </list>
     </option>
   </component>
@@ -417,18 +414,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java</url>
-          <line>278</line>
+          <line>283</line>
           <properties />
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java</url>
-          <line>220</line>
+          <line>223</line>
           <properties />
-          <option name="timeStamp" value="20" />
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="21" />
+      <option name="time" value="22" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -448,8 +445,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10177#10178#0" expanded="true" />
-            <element signature="e#10214#10215#0" expanded="true" />
+            <element signature="e#10399#10400#0" expanded="true" />
+            <element signature="e#10436#10437#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -474,8 +471,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10177#10178#0" expanded="true" />
-            <element signature="e#10214#10215#0" expanded="true" />
+            <element signature="e#10399#10400#0" expanded="true" />
+            <element signature="e#10436#10437#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -508,8 +505,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10177#10178#0" expanded="true" />
-            <element signature="e#10214#10215#0" expanded="true" />
+            <element signature="e#10399#10400#0" expanded="true" />
+            <element signature="e#10436#10437#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -526,8 +523,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10177#10178#0" expanded="true" />
-            <element signature="e#10214#10215#0" expanded="true" />
+            <element signature="e#10399#10400#0" expanded="true" />
+            <element signature="e#10436#10437#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -577,8 +574,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="293" column="23" lean-forward="false" selection-start-line="293" selection-start-column="23" selection-end-line="293" selection-end-column="23" />
+        <state relative-caret-position="292">
+          <caret line="226" column="47" lean-forward="false" selection-start-line="226" selection-start-column="47" selection-end-line="226" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -586,8 +583,8 @@
             <element signature="e#3158#3159#0" expanded="true" />
             <element signature="e#3208#3209#0" expanded="true" />
             <element signature="method#closeThread#0;class#ClientHandler#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#10177#10178#0" expanded="true" />
-            <element signature="e#10214#10215#0" expanded="true" />
+            <element signature="e#10399#10400#0" expanded="true" />
+            <element signature="e#10436#10437#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>

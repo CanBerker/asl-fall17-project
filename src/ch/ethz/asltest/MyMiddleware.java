@@ -220,8 +220,8 @@ public class MyMiddleware {
                 // Forward the SET request to all servers
                 for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
                     // TODO: Design Question: (Write + Read) x3 OR Write x3 + Read x3
-                    serverWriters.get(serverIndex).println(message + "\r");           // forward message to server (\r is used instead of \r\n due to println function)
-                    serverWriters.get(serverIndex).println(payload + "\r");           // forward payload to server
+
+                    serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");           // forward message to server (\r is used instead of \r\n due to println function)
                     String serverResponse = serverReaders.get(serverIndex).readLine();  // read server's response
                     // if a server has failed to store the value
                     if (!serverResponse.equals("STORED")) {
@@ -241,10 +241,15 @@ public class MyMiddleware {
         public String getOperation(String message, int roundRobinServerIndex) {
             try {
                 // Forward the GET request to the server with the given round robin index
-                serverWriters.get(roundRobinServerIndex).println(message);      // forward request to server
-                String serverResponse;      // read server's response until END string is found
-                while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null && serverResponse.equals("END\r\n")) {
-
+                serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server
+                List<String> serverResponse = new ArrayList<>();      // read server's response until END string is found
+                String serverResponseLine;
+                while ((serverResponseLine = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
+                    serverResponse.add(serverResponseLine);
+                    if (serverResponseLine.equals("END")) {
+                        // append the "END" command to the server responses and break the while loop
+                        break;
+                    }
                 }
 
 
