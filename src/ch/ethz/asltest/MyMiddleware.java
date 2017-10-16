@@ -49,6 +49,7 @@ public class MyMiddleware {
     public void run() {
         try {
             netThread.start();
+            // TODO: Implement responseThread
             startWorkerThreads();
 
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class MyMiddleware {
         public void run() {
             try {
                 networkSocket = new ServerSocket(networkPort);
-                System.out.println("Listening ...");
+                System.out.println("Network Thread: Listening ...");
                 while (true) {
                     ClientHandler newClientHandler = new ClientHandler(networkSocket.accept());
                     clientHandlers.add(newClientHandler);
@@ -98,13 +99,14 @@ public class MyMiddleware {
 
     private static class ClientHandler extends Thread {
         private Socket clientSocket;
-        private PrintWriter out;
+        // private PrintWriter out;
         private BufferedReader in;
         private static int activeUserCount = 0;
         private int clientID = 0;
 
         public ClientHandler(Socket socket) {
             this.clientSocket = socket;
+            System.out.println(getClientIP());
         }
 
         public void incrementUserCount() {
@@ -115,14 +117,18 @@ public class MyMiddleware {
             activeUserCount -= 1;
         }
 
+        public String getClientIP () {
+            return this.clientSocket.getInetAddress().toString();
+        }
+
         public void run() {
 
-            System.out.println("Client connected!");
+            System.out.println("Client Handler: Client connected!");
             clientID = activeUserCount;
             incrementUserCount();
 
             try {
-                out = new PrintWriter(clientSocket.getOutputStream(), true);        // define the output of socket to send serverResponse in the workerThread
+                // out = new PrintWriter(clientSocket.getOutputStream(), true);        // define the output of socket to send serverResponse in the workerThread
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));      // define input of socket to read the request of the client
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
@@ -161,7 +167,7 @@ public class MyMiddleware {
         private void closeThread () {
             try {
                 in.close();
-                out.close();
+                // out.close();
                 clientSocket.close();
             } catch (IOException e) {
                 System.out.println("LOG: ClientHandler: Error while closing readers, writers or sockets.");
@@ -182,7 +188,6 @@ public class MyMiddleware {
         private List<Socket> serverSockets;             // keep server sockets, writers and readers in seperate lists
         private List<PrintWriter> serverWriters;
         private List<BufferedReader> serverReaders;
-
 
         public WorkerThread() {
             try
@@ -216,10 +221,8 @@ public class MyMiddleware {
             try {
                 // Forward the SET request to all servers
                 for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
-                    // TODO: Design Question: (Write + Read) x3 OR Write x3 + Read x3
-
-                    serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");           // forward message to server (\r is used instead of \r\n due to println function)
-                    String serverResponse = serverReaders.get(serverIndex).readLine();  // read server's response
+                    serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");  // forward message to server (\r is used instead of \r\n due to println function)
+                    String serverResponse = serverReaders.get(serverIndex).readLine();          // read server's response
                     // if a server has failed to store the value
                     if (!serverResponse.equals("STORED")) {
                         return serverResponse;
@@ -259,24 +262,54 @@ public class MyMiddleware {
             }
         }
 
-        // TODO: Implement multi-GET operation
-        // multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
-        public String multiGetOperation(String message, int roundRobinServerIndex) {
+        // TODO: Test sharded multi-GET operation
+        // sharded multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
+        // since all servers get one request each, does not have an effect on roundRobinServerIndex outside the scope of the function
+        public String shardedMultiGetOperation(String message, int roundRobinServerIndex, String[] keys) {
             try {
-                // Forward the GET request to the server with the given round robin index
-                serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server
-                String serverResponse;
-                StringBuilder builder = new StringBuilder();
-                while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
-                    builder.append(serverResponse);
-                    // append responses until "END" message is received
-                    if (!serverResponse.equals("END")) {
-                        builder.append("\r\n");
+                int serverCount = mcAddresses.size();
+                int totalKeyCount = keys.length;
+                int keysPerServer = (int)Math.floor(keys.length/serverCount);
+                int remainingkeyCount = totalKeyCount % serverCount;
+                int totalKeyIndex = 0;       // index used while iterating over the keys array
+
+                // assign the ~same number of keys to each server(rounded) up and send the requests
+                for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+                    int serverKeyCount = keysPerServer;
+                    if (remainingkeyCount != 0) {
+                        serverKeyCount += 1;
+                        remainingkeyCount -= 1;
                     }
-                    else {
-                        break;
+
+                    StringBuilder builder = new StringBuilder("get ");
+                    for (int keyIndex = 0; keyIndex < serverKeyCount; keyIndex++) {
+                        builder.append(keys[totalKeyIndex]);
+                        builder.append(" ");        // tested: last " " before the "\r" doesn't cause any issues
+                        totalKeyIndex++;
+                    }
+
+                    int selectedServer = (roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
+
+                    // Forward the GET request to the server with the given round robin index
+                    serverWriters.get(selectedServer).println(builder.toString() + "\r");
+                }
+
+                StringBuilder builder = new StringBuilder();
+                for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+                    int selectedServer = (roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
+                    String serverResponse;
+                    while ((serverResponse = serverReaders.get(selectedServer).readLine()) != null) {
+                        // append responses until "END" message is received
+                        if (!serverResponse.equals("END")) {
+                            builder.append(serverResponse);
+                            builder.append("\r\n");
+                        }
+                        else {
+                            break;  // do nothing
+                        }
                     }
                 }
+                builder.append("END");
                 return builder.toString();
             }  catch (IOException e) {
                 System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
@@ -311,8 +344,7 @@ public class MyMiddleware {
                             if (keysArray.length == 1) {
                                 serverResponse = getOperation(message, roundRobinServerIndex);
                             } else {
-                                // TODO: Don't forget to synch. the increment in round robin index during the multi-get operation
-                                serverResponse = multiGetOperation(message, roundRobinServerIndex);
+                                serverResponse = shardedMultiGetOperation(message, roundRobinServerIndex, keysArray);
                             }
                         }
                     } else {
@@ -324,9 +356,9 @@ public class MyMiddleware {
 
                     // if a proper client request command is found and an according response is received from the server
                     if (!serverResponse.equals("")) {
-                        // TODO: forward the response to the client
                         // TODO: Handle the return of "EXCEPTION" as serverResponse
-                        clientHandlers.get(clientID).out.println(serverResponse + "\r");
+                        // TODO: Use responseThread connection
+                        // clientHandlers.get(clientID).out.println(serverResponse + "\r");
 
                         // increment the round robin index and take modulo with number of servers
                         roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();
