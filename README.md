@@ -53,18 +53,18 @@ java -jar dist/middleware-ccikis.jar  -l 127.0.0.1 -p 16399 -t 13 -s false -m 12
 
 Multi-Get Demo:
 ```
-echo -e 'set memtier-696 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-670 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-979 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-824 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-589 0 9999 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-690 0 9999 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-567 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-687 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-397 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-574 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
-echo -e 'set memtier-92 0 9999 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 11211
+echo -e 'set memtier-696 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-670 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-979 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-824 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-589 0 9999 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-690 0 9999 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-567 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-687 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-397 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-574 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
+echo -e 'set memtier-92 0 9999 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r' | nc localhost 16399
 
-echo -e 'get memtier-696 memtier-670 memtier-979 memtier-824 memtier-589 memtier-690 memtier-567 memtier-687 memtier-397 memtier-574 memtier-92\r' | nc localhost 11211
+echo -e 'get memtier-696 memtier-670 memtier-979 memtier-824 memtier-589 memtier-690 memtier-567 memtier-687 memtier-397 memtier-574\r' | nc localhost 16399
 
 ```

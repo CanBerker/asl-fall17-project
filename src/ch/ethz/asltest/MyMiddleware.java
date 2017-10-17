@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ public class MyMiddleware {
     protected static boolean readSharded;
 
     protected static NetworkThread netThread;
-    protected static List<ClientHandler> clientHandlers;
+    protected static List<ClientInputHandler> clientInputHandlers;
     protected static BlockingQueue<Request> requestsQueue;
+    protected static List<ClientOutputHandler> clientOutputHandlers;
+    protected static BlockingQueue<Response> responseQueue;
     protected List<WorkerThread> workerThreads;
 
 
@@ -41,8 +44,10 @@ public class MyMiddleware {
         this.readSharded = readSharded;
 
         this.netThread = new NetworkThread(networkPort);
-        this.clientHandlers = new ArrayList<>();
+        this.clientInputHandlers = new ArrayList<>();
         this.requestsQueue = new LinkedBlockingQueue<>();
+        this.clientOutputHandlers = new ArrayList<>();
+        this.responseQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
 
@@ -75,9 +80,21 @@ public class MyMiddleware {
                 networkSocket = new ServerSocket(networkPort);
                 System.out.println("Network Thread: Listening ...");
                 while (true) {
-                    ClientHandler newClientHandler = new ClientHandler(networkSocket.accept());
-                    clientHandlers.add(newClientHandler);
-                    newClientHandler.start();
+                    // accept incoming connection and start clienthandler with created socket
+                    Socket clientInputSocket = networkSocket.accept();
+                    ClientInputHandler newClientInputHandler = new ClientInputHandler(clientInputSocket);
+                    clientInputHandlers.add(newClientInputHandler);
+                    newClientInputHandler.start();
+
+                    // causes endless loop at localhost
+                    /*
+                    // get the IP of the client using the incoming connection and create a socket for output
+                    InetAddress clientIP = clientInputSocket.getInetAddress();
+                    Socket clientOutputSocket = new Socket(clientIP, networkPort);
+                    ClientOutputHandler newClientOutputHandler = new ClientOutputHandler(clientOutputSocket);
+                    clientOutputHandlers.add(newClientOutputHandler);
+                    newClientOutputHandler.start();
+                    */
                 }
             } catch (IOException e) {
                 System.out.println("LOG: NetworkThread: Server socket failed to accept connection.");
@@ -97,16 +114,15 @@ public class MyMiddleware {
         }
     }
 
-    private static class ClientHandler extends Thread {
+    private static class ClientInputHandler extends Thread {
         private Socket clientSocket;
         // private PrintWriter out;
         private BufferedReader in;
         private static int activeUserCount = 0;
         private int clientID = 0;
 
-        public ClientHandler(Socket socket) {
+        public ClientInputHandler(Socket socket) {
             this.clientSocket = socket;
-            System.out.println(getClientIP());
         }
 
         public void incrementUserCount() {
@@ -123,7 +139,7 @@ public class MyMiddleware {
 
         public void run() {
 
-            System.out.println("Client Handler: Client connected!");
+            System.out.println("Client Input Handler: Client connected!");
             clientID = activeUserCount;
             incrementUserCount();
 
@@ -154,10 +170,10 @@ public class MyMiddleware {
                     requestsQueue.add(request);
                 }
             } catch (IOException e) {
-                System.out.println("LOG: ClientHandler: Reading from socket stream failed.");
+                System.out.println("LOG: ClientInputHandler: Reading from socket stream failed.");
                 e.printStackTrace();
             } catch (IllegalStateException e) {
-                System.out.println("LOG: ClientHandler: Insertion to request queue failed.");
+                System.out.println("LOG: ClientInputHandler: Insertion to request queue failed.");
                 e.printStackTrace();
             } finally {
                 closeThread();
@@ -170,7 +186,67 @@ public class MyMiddleware {
                 // out.close();
                 clientSocket.close();
             } catch (IOException e) {
-                System.out.println("LOG: ClientHandler: Error while closing readers, writers or sockets.");
+                System.out.println("LOG: ClientInputHandler: Error while closing readers, writers or sockets.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static class ClientOutputHandler extends Thread {
+        private Socket clientSocket;
+        private PrintWriter out;
+        // private BufferedReader in;
+        private static int activeUserCount = 0;
+        private int clientID = 0;
+
+        public ClientOutputHandler(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        public void incrementUserCount() {
+            activeUserCount += 1;
+        }
+
+        public void decrementUserCount() {
+            activeUserCount -= 1;
+        }
+
+        public String getClientIP () {
+            return this.clientSocket.getInetAddress().toString();
+        }
+
+        public void run() {
+
+            System.out.println("Client Output Handler: Client connected!");
+            clientID = activeUserCount;
+            incrementUserCount();
+
+            try {
+                out = new PrintWriter(clientSocket.getOutputStream(), true);        // define the output of socket to send serverResponse in the workerThread
+
+                Response response;
+                while ((response = responseQueue.take()) != null)     // read the next request from the requests queue
+                {
+                    clientOutputHandlers.get(response.getClientID()).out.println(response.getMessage());
+                }
+            } catch (IOException e) {
+                System.out.println("LOG: ClientOutputHandler: Sending data with output socket has failed.");
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                System.out.println("LOG: ClientOutputHandler: Error while reading from the requests queue.");
+                e.printStackTrace();
+            } finally {
+                closeThread();
+            }
+        }
+
+        private void closeThread () {
+            try {
+                //in.close();
+                out.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                System.out.println("LOG: ClientOutputHandler: Error while closing readers, writers or sockets.");
                 e.printStackTrace();
             }
         }
@@ -222,6 +298,8 @@ public class MyMiddleware {
                 // Forward the SET request to all servers
                 for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
                     serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");  // forward message to server (\r is used instead of \r\n due to println function)
+                }
+                for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
                     String serverResponse = serverReaders.get(serverIndex).readLine();          // read server's response
                     // if a server has failed to store the value
                     if (!serverResponse.equals("STORED")) {
@@ -357,14 +435,14 @@ public class MyMiddleware {
                     // if a proper client request command is found and an according response is received from the server
                     if (!serverResponse.equals("")) {
                         // TODO: Handle the return of "EXCEPTION" as serverResponse
-                        // TODO: Use responseThread connection
-                        // clientHandlers.get(clientID).out.println(serverResponse + "\r");
+
+                        responseQueue.add(new Response(clientID, serverResponse));
+                        // clientInputHandlers.get(clientID).out.println(serverResponse + "\r");
 
                         // increment the round robin index and take modulo with number of servers
                         roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();
                     }
                 }
-
             } catch (InterruptedException e) {
                 System.out.println("LOG: Worker Thread: Error while reading from the requests queue.");
                 e.printStackTrace();
@@ -388,13 +466,13 @@ public class MyMiddleware {
     }
 
 
-//    private static class ClientHandler extends Thread {
+//    private static class ClientInputHandler extends Thread {
 //        private Socket clientSocket;
 //        private PrintWriter out;
 //        private BufferedReader in;
 //        private static int activeUserCount = 0;
 //
-//        public ClientHandler(Socket socket) {
+//        public ClientInputHandler(Socket socket) {
 //            this.clientSocket = socket;
 //        }
 //
