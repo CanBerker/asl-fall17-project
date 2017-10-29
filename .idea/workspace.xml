@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/Response.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,14 +14,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="307" column="17" lean-forward="false" selection-start-line="307" selection-start-column="17" selection-end-line="307" selection-end-column="17" />
+            <state relative-caret-position="406">
+              <caret line="42" column="43" lean-forward="true" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="e#7412#7413#0" expanded="true" />
+                <element signature="e#7462#7463#0" expanded="true" />
+                <element signature="e#7506#7507#0" expanded="true" />
+                <element signature="e#7550#7551#0" expanded="true" />
+                <element signature="e#7594#7595#0" expanded="true" />
+                <element signature="e#7638#7639#0" expanded="true" />
+                <element signature="e#7678#7679#0" expanded="true" />
+                <element signature="e#7754#7755#0" expanded="true" />
                 <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
               </folding>
             </state>
@@ -35,17 +40,17 @@
         <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
-              <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+              <caret line="18" column="30" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="33" column="3" lean-forward="true" selection-start-line="33" selection-start-column="3" selection-end-line="33" selection-end-column="3" />
+            <state relative-caret-position="533">
+              <caret line="57" column="43" lean-forward="false" selection-start-line="57" selection-start-column="43" selection-end-line="57" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -137,8 +142,8 @@
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/RequestQueue.java" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Response.java" />
-        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
       </list>
     </option>
   </component>
@@ -165,9 +170,6 @@
     </navigator>
     <panes>
       <pane id="AndroidView" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -190,6 +192,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -398,7 +403,6 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -409,7 +413,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26353198" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26626572" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -420,6 +424,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24986331" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -473,11 +478,81 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3864">
+          <caret line="307" column="17" lean-forward="false" selection-start-line="307" selection-start-column="17" selection-end-line="307" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
+            <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+          <folding>
+            <element signature="method#Request#0;class#Request#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Response.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="14" column="26" lean-forward="false" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="994">
+          <caret line="71" column="42" lean-forward="false" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="57" column="43" lean-forward="true" selection-start-line="57" selection-start-column="43" selection-end-line="57" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
           <caret line="83" column="32" lean-forward="false" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -532,6 +607,14 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -570,6 +653,14 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -608,6 +699,14 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -628,6 +727,14 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -656,6 +763,14 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -668,6 +783,14 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
         </state>
@@ -715,31 +838,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="307" column="17" lean-forward="false" selection-start-line="307" selection-start-column="17" selection-end-line="307" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+          <caret line="18" column="30" lean-forward="false" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="33" column="3" lean-forward="true" selection-start-line="33" selection-start-column="3" selection-end-line="33" selection-end-column="3" />
+        <state relative-caret-position="533">
+          <caret line="57" column="43" lean-forward="false" selection-start-line="57" selection-start-column="43" selection-end-line="57" selection-end-column="43" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="42" column="43" lean-forward="true" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#7462#7463#0" expanded="true" />
+            <element signature="e#7506#7507#0" expanded="true" />
+            <element signature="e#7550#7551#0" expanded="true" />
+            <element signature="e#7594#7595#0" expanded="true" />
+            <element signature="e#7638#7639#0" expanded="true" />
+            <element signature="e#7678#7679#0" expanded="true" />
+            <element signature="e#7754#7755#0" expanded="true" />
+            <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
