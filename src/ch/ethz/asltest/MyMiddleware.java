@@ -5,14 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Pattern;
 
 
 public class MyMiddleware {
@@ -25,10 +30,7 @@ public class MyMiddleware {
     protected static boolean readSharded;
 
     protected static NetworkThread netThread;
-    protected static List<ClientInputHandler> clientInputHandlers;
     protected static BlockingQueue<Request> requestsQueue;
-    protected static List<ClientOutputHandler> clientOutputHandlers;
-    protected static BlockingQueue<Response> responseQueue;
     protected List<WorkerThread> workerThreads;
 
 
@@ -43,18 +45,14 @@ public class MyMiddleware {
         this.numThreadsPTP = numThreadsPTP;
         this.readSharded = readSharded;
 
-        this.netThread = new NetworkThread(networkPort);
-        this.clientInputHandlers = new ArrayList<>();
+        this.netThread = new NetworkThread(myIp, networkPort);
         this.requestsQueue = new LinkedBlockingQueue<>();
-        this.clientOutputHandlers = new ArrayList<>();
-        this.responseQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
 
     public void run() {
         try {
             netThread.start();
-            // TODO: Implement responseThread
             startWorkerThreads();
 
         } catch (Exception e) {
@@ -66,192 +64,152 @@ public class MyMiddleware {
     }
 
     private static class NetworkThread extends Thread {
-
+        private String myIP;
         private int networkPort;
-        private ServerSocket networkSocket;
+        private Selector selector;
+        ServerSocketChannel networkSocket;
 
-        public NetworkThread(int networkPort)
+        private PrintWriter out;
+        private BufferedReader in;
+
+        public NetworkThread(String myIP, int networkPort)
         {
+            this.myIP = myIP;
             this.networkPort = networkPort;
         }
 
         public void run() {
             try {
-                networkSocket = new ServerSocket(networkPort);
+                selector =  Selector.open();
+                networkSocket = ServerSocketChannel.open();
+                networkSocket.bind(new InetSocketAddress(myIP, networkPort));
+                networkSocket.configureBlocking(false);
+                networkSocket.register(selector, SelectionKey.OP_ACCEPT);
+                ByteBuffer buffer = ByteBuffer.allocate(2048);  // israf vol 1 :D
+
+                // Charset charset = Charset.forName("ISO-8859-1");
+                // Charset charset = Charset.forName("UTF-8");
+
+                int clientIndex = 0;
+                String inputLine = "";
+
                 System.out.println("Network Thread: Listening ...");
                 while (true) {
-                    // accept incoming connection and start clienthandler with created socket
-                    Socket clientInputSocket = networkSocket.accept();
-                    ClientInputHandler newClientInputHandler = new ClientInputHandler(clientInputSocket);
-                    clientInputHandlers.add(newClientInputHandler);
-                    newClientInputHandler.start();
+                    int readyChannels = selector.select();
+                    if (readyChannels == 0) {
+                        continue;
+                    }
+                    else {
+                        Set selectedKeys = selector.selectedKeys();
+                        Iterator iter = selectedKeys.iterator();
+                        while (iter.hasNext()) {
+                            SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
 
-                    // causes endless loop at localhost
-                    /*
-                    // get the IP of the client using the incoming connection and create a socket for output
-                    InetAddress clientIP = clientInputSocket.getInetAddress();
-                    Socket clientOutputSocket = new Socket(clientIP, networkPort);
-                    ClientOutputHandler newClientOutputHandler = new ClientOutputHandler(clientOutputSocket);
-                    clientOutputHandlers.add(newClientOutputHandler);
-                    newClientOutputHandler.start();
-                    */
+                            if (!key.isValid()) {
+                                continue;
+                            }
+                            else if (key.isAcceptable()) {
+                                SocketChannel client = networkSocket.accept();
+                                client.configureBlocking(false);
+                                client.register(selector, SelectionKey.OP_READ, clientIndex++);     // attach a client index integer as an object
+                            }
+                            else if (key.isReadable()) {
+                                SocketChannel client = (SocketChannel) key.channel();
+                                int clientID = (int) key.attachment();      // get the client ID from attachment of the key
+                                int numBytesRead = client.read(buffer);
+
+                                // if end of stream is received, bytes read is set to -1 meaning socket has been closed(shouldn't happen in a normal run)
+                                if (numBytesRead != -1) {
+                                    inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
+
+                                    // keep reading until full packet ending in \r\n is received
+                                    while (!inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
+                                        numBytesRead = client.read(buffer);
+                                        inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
+                                    }
+
+                                    if(inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
+                                        String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
+                                        String requestType = requestParts[0];
+
+                                        Request request;
+                                        if (requestType.equals("get")){
+                                            request = new Request(clientID, inputLine, "GET");
+                                        } else {
+                                            // read the payload line
+                                            String[] setParts = inputLine.split(Pattern.quote("\r\n"));
+                                            String message = setParts[0];
+                                            String payload = setParts[1];
+                                            request = new Request(clientID, message, "SET", payload);
+                                        }
+
+                                        requestsQueue.add(request);
+                                        inputLine = "";     // reset the inputline
+                                    }
+                                    else {
+                                        System.out.println("LOG: NetworkThread: Fragmented packet couldn't be recovered");
+                                    }
+                                }
+                                else {
+                                    key.cancel();
+                                    client.close();
+                                }
+
+                                buffer.clear();
+                            }
+                            iter.remove();
+                        }
+                    }
                 }
             } catch (IOException e) {
                 System.out.println("LOG: NetworkThread: Server socket failed to accept connection.");
                 e.printStackTrace();
+            } catch (StringIndexOutOfBoundsException e) {
+                System.out.println("LOG: NetworkThread: String operation failed due to indexing error.");
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.out.println("LOG: NetworkThread: Exception.");
+                e.printStackTrace();
             } finally {
                 closeThread();
+            }
+        }
+
+        public void sendServerResponse(int clientID, String serverResponse) {
+            try {
+                Iterator iter = selector.keys().iterator();
+                while (iter.hasNext()) {
+                    SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
+                    if (key.attachment() != null && (int) key.attachment() == clientID) {
+                        SocketChannel client = (SocketChannel) key.channel();
+                        ByteBuffer buffer = ByteBuffer.allocate(2048);  // israf vol 2 :D
+                        buffer = ByteBuffer.wrap(serverResponse.getBytes());
+
+                        client.write(buffer);
+                    }
+                    else {
+                        continue;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("LOG: NetworkThread: Middleware failed to send the server response.");
+                e.printStackTrace();
+            } catch (Exception e) {
+                System.out.println("LOG: NetworkThread: Exception.");
+                e.printStackTrace();
             }
         }
 
         private void closeThread () {
             try {
                 networkSocket.close();
+                selector.close();
             } catch (IOException e) {
                 System.out.println("LOG: NetworkThread: Error while closing sockets.");
                 e.printStackTrace();
             }
         }
     }
-
-    private static class ClientInputHandler extends Thread {
-        private Socket clientSocket;
-        // private PrintWriter out;
-        private BufferedReader in;
-        private static int activeUserCount = 0;
-        private int clientID = 0;
-
-        public ClientInputHandler(Socket socket) {
-            this.clientSocket = socket;
-        }
-
-        public void incrementUserCount() {
-            activeUserCount += 1;
-        }
-
-        public void decrementUserCount() {
-            activeUserCount -= 1;
-        }
-
-        public String getClientIP () {
-            return this.clientSocket.getInetAddress().toString();
-        }
-
-        public void run() {
-
-            System.out.println("Client Input Handler: Client connected!");
-            clientID = activeUserCount;
-            incrementUserCount();
-
-            try {
-                // out = new PrintWriter(clientSocket.getOutputStream(), true);        // define the output of socket to send serverResponse in the workerThread
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));      // define input of socket to read the request of the client
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    // SET format   -- sends a MESSAGE(multiple fields seperated by whitespace) and a PAYLOAD
-                    // <command name> <key> <flags> <exptime> <bytes> [noreply]\r\n
-                    // <data block>\r\n
-
-                    // GET format   -- sends a MESSAGE(single key or multiple seperated by whitespace)
-                    // get <key>*\r\n
-
-                    String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
-                    String requestType = requestParts[0];
-
-                    Request request;
-                    if (requestType.equals("get")){
-                        request = new Request(clientID, inputLine, "GET");
-                    } else {
-                        // read the payload line
-                        String payload = in.readLine();
-                        request = new Request(clientID, inputLine, "SET", payload);
-                    }
-
-                    requestsQueue.add(request);
-                }
-            } catch (IOException e) {
-                System.out.println("LOG: ClientInputHandler: Reading from socket stream failed.");
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                System.out.println("LOG: ClientInputHandler: Insertion to request queue failed.");
-                e.printStackTrace();
-            } finally {
-                closeThread();
-            }
-        }
-
-        private void closeThread () {
-            try {
-                in.close();
-                // out.close();
-                clientSocket.close();
-            } catch (IOException e) {
-                System.out.println("LOG: ClientInputHandler: Error while closing readers, writers or sockets.");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static class ClientOutputHandler extends Thread {
-        private Socket clientSocket;
-        private PrintWriter out;
-        // private BufferedReader in;
-        private static int activeUserCount = 0;
-        private int clientID = 0;
-
-        public ClientOutputHandler(Socket socket) {
-            this.clientSocket = socket;
-        }
-
-        public void incrementUserCount() {
-            activeUserCount += 1;
-        }
-
-        public void decrementUserCount() {
-            activeUserCount -= 1;
-        }
-
-        public String getClientIP () {
-            return this.clientSocket.getInetAddress().toString();
-        }
-
-        public void run() {
-
-            System.out.println("Client Output Handler: Client connected!");
-            clientID = activeUserCount;
-            incrementUserCount();
-
-            try {
-                out = new PrintWriter(clientSocket.getOutputStream(), true);        // define the output of socket to send serverResponse in the workerThread
-
-                Response response;
-                while ((response = responseQueue.take()) != null)     // read the next request from the requests queue
-                {
-                    clientOutputHandlers.get(response.getClientID()).out.println(response.getMessage());
-                }
-            } catch (IOException e) {
-                System.out.println("LOG: ClientOutputHandler: Sending data with output socket has failed.");
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                System.out.println("LOG: ClientOutputHandler: Error while reading from the requests queue.");
-                e.printStackTrace();
-            } finally {
-                closeThread();
-            }
-        }
-
-        private void closeThread () {
-            try {
-                //in.close();
-                out.close();
-                clientSocket.close();
-            } catch (IOException e) {
-                System.out.println("LOG: ClientOutputHandler: Error while closing readers, writers or sockets.");
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     private void startWorkerThreads() {
         for(int threadCount = 0; threadCount < numThreadsPTP; threadCount++) {
@@ -319,7 +277,8 @@ public class MyMiddleware {
         public String getOperation(String message, int roundRobinServerIndex) {
             try {
                 // Forward the GET request to the server with the given round robin index
-                serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server
+                message = message.substring(0, message.length()-1);     // remove \n from the end, println adds it
+                serverWriters.get(roundRobinServerIndex).println(message);      // forward request to server
                 String serverResponse;
                 StringBuilder builder = new StringBuilder();
                 while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
@@ -428,16 +387,18 @@ public class MyMiddleware {
                     } else {
                         // refuse unrecognized requestType
                         System.out.println("Unrecognized Command. Waiting for a newline to reinitialize.");
-                        // TODO: Log the unrecognized command
-                        // TODO: Discard all input until a newline arrives.
+                        // TODO: Log the unrecognized command. Discard all input until a newline arrives.
                     }
 
                     // if a proper client request command is found and an according response is received from the server
                     if (!serverResponse.equals("")) {
                         // TODO: Handle the return of "EXCEPTION" as serverResponse
 
-                        responseQueue.add(new Response(clientID, serverResponse));
+
+                        // TODO: implement response to client
                         // clientInputHandlers.get(clientID).out.println(serverResponse + "\r");
+                        netThread.sendServerResponse(clientID, serverResponse + "\r\n");
+
 
                         // increment the round robin index and take modulo with number of servers
                         roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();
@@ -464,59 +425,5 @@ public class MyMiddleware {
             }
         }
     }
-
-
-//    private static class ClientInputHandler extends Thread {
-//        private Socket clientSocket;
-//        private PrintWriter out;
-//        private BufferedReader in;
-//        private static int activeUserCount = 0;
-//
-//        public ClientInputHandler(Socket socket) {
-//            this.clientSocket = socket;
-//        }
-//
-//        public void incrementUserCount() {
-//            activeUserCount += 1;
-//        }
-//
-//        public void decrementUserCount() {
-//            activeUserCount -= 1;
-//        }
-//
-//        public void run() {
-//
-//            System.out.println("Client connected!");
-//            incrementUserCount();
-//
-//            try {
-//                out = new PrintWriter(clientSocket.getOutputStream(), true);
-//                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//                String inputLine;
-//                while ((inputLine = in.readLine()) != null) {
-//                    // Log the client text
-//                    System.out.println("A client said the following:" + "\t" + inputLine);
-//                    out.println(String.format("Server[%d]: \"%s\"", activeUserCount, inputLine));
-//
-//                    if (".".equals(inputLine)) {
-//                        System.out.println("Bye, friend.");
-//                        decrementUserCount();
-//                        clientSocket.close(); // may be redundant
-//                        break;
-//                    }
-//                }
-//
-//                System.out.println("Closing socket things then");
-//                in.close();
-//                out.close();
-//                clientSocket.close();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-
 
 }
