@@ -69,9 +69,6 @@ public class MyMiddleware {
         private Selector selector;
         ServerSocketChannel networkSocket;
 
-        private PrintWriter out;
-        private BufferedReader in;
-
         public NetworkThread(String myIP, int networkPort)
         {
             this.myIP = myIP;
@@ -105,6 +102,7 @@ public class MyMiddleware {
                         while (iter.hasNext()) {
                             SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
 
+                            // check if key is valid first to account for key cancelling.
                             if (!key.isValid()) {
                                 continue;
                             }
@@ -129,6 +127,7 @@ public class MyMiddleware {
                                     }
 
                                     if(inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
+                                        inputLine = inputLine.trim();       // remove leading and trailing whitespaces and newlines
                                         String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
                                         String requestType = requestParts[0];
 
@@ -137,7 +136,7 @@ public class MyMiddleware {
                                             request = new Request(clientID, inputLine, "GET");
                                         } else {
                                             // read the payload line
-                                            String[] setParts = inputLine.split(Pattern.quote("\r\n"));
+                                            String[] setParts = inputLine.split(Pattern.quote("\r\n"));   // with telnet split at \\ instead of \
                                             String message = setParts[0];
                                             String payload = setParts[1];
                                             request = new Request(clientID, message, "SET", payload);
@@ -177,12 +176,12 @@ public class MyMiddleware {
 
         public void sendServerResponse(int clientID, String serverResponse) {
             try {
+                ByteBuffer buffer;
                 Iterator iter = selector.keys().iterator();
                 while (iter.hasNext()) {
                     SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
                     if (key.attachment() != null && (int) key.attachment() == clientID) {
                         SocketChannel client = (SocketChannel) key.channel();
-                        ByteBuffer buffer = ByteBuffer.allocate(2048);  // israf vol 2 :D
                         buffer = ByteBuffer.wrap(serverResponse.getBytes());
 
                         client.write(buffer);
@@ -277,8 +276,7 @@ public class MyMiddleware {
         public String getOperation(String message, int roundRobinServerIndex) {
             try {
                 // Forward the GET request to the server with the given round robin index
-                message = message.substring(0, message.length()-1);     // remove \n from the end, println adds it
-                serverWriters.get(roundRobinServerIndex).println(message);      // forward request to server
+                serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server, println adds the "\n"
                 String serverResponse;
                 StringBuilder builder = new StringBuilder();
                 while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
@@ -299,7 +297,6 @@ public class MyMiddleware {
             }
         }
 
-        // TODO: Test sharded multi-GET operation
         // sharded multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
         // since all servers get one request each, does not have an effect on roundRobinServerIndex outside the scope of the function
         public String shardedMultiGetOperation(String message, int roundRobinServerIndex, String[] keys) {
@@ -393,12 +390,12 @@ public class MyMiddleware {
                     // if a proper client request command is found and an according response is received from the server
                     if (!serverResponse.equals("")) {
                         // TODO: Handle the return of "EXCEPTION" as serverResponse
-
-
-                        // TODO: implement response to client
-                        // clientInputHandlers.get(clientID).out.println(serverResponse + "\r");
-                        netThread.sendServerResponse(clientID, serverResponse + "\r\n");
-
+                        if(serverResponse.equals("EXCEPTION")) {
+                            // do nothing
+                        }
+                        else {
+                            netThread.sendServerResponse(clientID, serverResponse + "\r\n");
+                        }
 
                         // increment the round robin index and take modulo with number of servers
                         roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();

@@ -18,12 +18,13 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="129" column="0" lean-forward="true" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+            <state relative-caret-position="14">
+              <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
               </folding>
@@ -34,8 +35,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="55" column="35" lean-forward="false" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="35" />
+            <state relative-caret-position="280">
+              <caret line="20" column="190" lean-forward="false" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="190" />
               <folding />
             </state>
           </provider>
@@ -90,7 +91,6 @@
       <find>request</find>
       <find>netThread</find>
       <find>requestsQueue</find>
-      <find>out</find>
       <find>client connected</find>
       <find>mcAddresses</find>
       <find>==</find>
@@ -110,6 +110,8 @@
       <find>127.</find>
       <find>read</find>
       <find>clientin</find>
+      <find>printwriter</find>
+      <find>out</find>
     </findStrings>
     <replaceStrings>
       <replace>ClientInputHandler</replace>
@@ -163,9 +165,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -189,6 +188,9 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -207,8 +209,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RunMW">
-    <configuration name="RunMW" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.RunMW_MultiServer_Sharded">
+    <configuration name="RunMW_MultiServer" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="ch.ethz.asltest.*" />
@@ -217,7 +219,7 @@
       </extension>
       <option name="MAIN_CLASS_NAME" value="ch.ethz.asltest.RunMW" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="-l 127.0.0.1 -p 16399 -t 1 -s false -m 127.0.0.1:11211" />
+      <option name="PROGRAM_PARAMETERS" value="-l 127.0.0.1 -p 16399 -t 1 -s false -m 127.0.0.1:11211 127.0.0.1:11212" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -227,7 +229,7 @@
       <module name="asl-fall17-project" />
       <envs />
     </configuration>
-    <configuration name="RunMW_Sharded" type="Application" factoryName="Application">
+    <configuration name="RunMW_MultiServer_Sharded" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="ch.ethz.asltest.*" />
@@ -237,6 +239,25 @@
       <option name="MAIN_CLASS_NAME" value="ch.ethz.asltest.RunMW" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="-l 127.0.0.1 -p 16399 -t 1 -s true -m 127.0.0.1:11211 127.0.0.1:11212" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="asl-fall17-project" />
+      <envs />
+    </configuration>
+    <configuration name="RunMW_SingleServer" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="ch.ethz.asltest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="ch.ethz.asltest.RunMW" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="-l 127.0.0.1 -p 16399 -t 1 -s false -m 127.0.0.1:11211" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -339,13 +360,14 @@
       <properties />
       <listeners />
     </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Application.RunMW_Sharded" />
-      <item index="1" class="java.lang.String" itemvalue="Application.RunMW" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Application.RunMW_MultiServer_Sharded" />
+      <item index="1" class="java.lang.String" itemvalue="Application.RunMW_MultiServer" />
+      <item index="2" class="java.lang.String" itemvalue="Application.RunMW_SingleServer" />
     </list>
     <recent_temporary>
       <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Application.RunMW" />
+        <item index="0" class="java.lang.String" itemvalue="Application.RunMW_SingleServer" />
       </list>
     </recent_temporary>
   </component>
@@ -397,7 +419,6 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -408,7 +429,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2717332" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27720067" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -419,6 +440,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24986331" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -461,11 +483,45 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="94" />
+      <option name="time" value="119" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="770">
+          <caret line="55" column="35" lean-forward="false" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+          <folding>
+            <element signature="method#Request#0;class#Request#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Response.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="14" column="26" lean-forward="false" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="994">
+          <caret line="71" column="42" lean-forward="false" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -474,6 +530,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -522,6 +579,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -570,6 +628,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -626,6 +685,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -682,6 +742,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -722,6 +783,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -762,6 +824,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -784,6 +847,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -814,6 +878,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -828,6 +893,7 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
@@ -888,26 +954,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
           <caret line="284" column="37" lean-forward="true" selection-start-line="284" selection-start-column="0" selection-end-line="285" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="55" column="35" lean-forward="false" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="35" />
+        <state relative-caret-position="280">
+          <caret line="20" column="190" lean-forward="false" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="190" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="129" column="0" lean-forward="true" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+        <state relative-caret-position="14">
+          <caret line="181" column="0" lean-forward="false" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#startWorkerThreads#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
           </folding>
