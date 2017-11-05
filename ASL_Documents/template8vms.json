@@ -19,11 +19,11 @@
       "type": "string"
     },
     "key": {
-      "defaultValue": "<your_public_SSH_key>",
+      "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuponz9Cmtw2Xjc9MuqHRhalpZf1EIq8fQK0tr28iH9uYOVNs6LlGXGoyo1lmu96tG1rQ7OZhCS+c/ue3QWWkLHYD4IYZtRTp+B3zUID5/+lqE3TmgiEVyf38ODCCu0tWxkqSr+QtFP4QTmxZYwE8Nnors7LcseMmc+Nr0bY5VMzrwEKxfhZYi5VU0AiMAD/zEDGl9GxLY7qGcN+oYbqtpW95grBv36veY0iYKpOB/EVb88KU2fJN5S5Nl1XL/SQ/4+zSsO7FQvCgSrire7MV9otExjWjeGvgUzBIX14ATka6/lmmvi/YgJUIb1Hyb5IaBzQASrzkhJ5STnKm9Jcqj ccikis@student.ethz.ch",
       "type": "string"
     },
     "uniquedns": {
-      "defaultValue": "<your_reallyuniquestring>",
+      "defaultValue": "can",
       "type": "string"
     }
   },
