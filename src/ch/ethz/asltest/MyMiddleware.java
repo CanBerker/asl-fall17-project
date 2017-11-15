@@ -1,9 +1,6 @@
 package ch.ethz.asltest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -31,7 +28,7 @@ public class MyMiddleware {
 
     protected static NetworkThread netThread;
     protected static BlockingQueue<Request> requestsQueue;
-    protected List<WorkerThread> workerThreads;
+    protected static List<WorkerThread> workerThreads;
 
 
     public MyMiddleware() {
@@ -63,16 +60,19 @@ public class MyMiddleware {
         }
     }
 
+
     private static class NetworkThread extends Thread {
         private String myIP;
         private int networkPort;
         private Selector selector;
         ServerSocketChannel networkSocket;
+        private boolean shutdownReceived;
 
         public NetworkThread(String myIP, int networkPort)
         {
             this.myIP = myIP;
             this.networkPort = networkPort;
+            this.shutdownReceived = false;
         }
 
         public void run() {
@@ -91,7 +91,7 @@ public class MyMiddleware {
                 String inputLine = "";
 
                 System.out.println("Network Thread: Listening ...");
-                while (true) {
+                while (shutdownReceived == false) {
                     int readyChannels = selector.select();
                     if (readyChannels == 0) {
                         continue;
@@ -120,13 +120,34 @@ public class MyMiddleware {
                                 if (numBytesRead != -1) {
                                     inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
 
-                                    // keep reading until full packet ending in \r\n is received
-                                    while (!inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
+                                    // keep reading if the shutdown isn't sent and full packet ending in \r\n hasn't been received yet
+                                    while (!inputLine.startsWith("shutdown") && !inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
                                         numBytesRead = client.read(buffer);
                                         inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
                                     }
 
-                                    if(inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
+                                    if(inputLine.startsWith("shutdown")) {
+                                        Thread.sleep(1000);
+                                        // TODO: Initialize Logging
+                                        // TODO: Filewriter header column "WorkerIndex, QueueTime, DequeueTime, ClientResponseTime\n"
+
+                                        shutdownReceived = true;
+                                        String fileName = "requestLog.txt";
+                                        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+
+                                        for (int i = 0; i < workerThreads.size(); i++) {
+                                            WorkerThread wt = workerThreads.get(i);
+                                            writer.write(wt.getFinalLogString());     // write to file
+                                            wt.closeThread();           // close worker thread
+                                            wt.interrupt();
+                                        }
+
+                                        writer.flush();
+                                        writer.close();
+
+                                        break;
+                                    }
+                                    else if(inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
                                         inputLine = inputLine.trim();       // remove leading and trailing whitespaces and newlines
                                         String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
                                         String requestType = requestParts[0];
@@ -136,7 +157,7 @@ public class MyMiddleware {
                                             request = new Request(clientID, inputLine, "GET");
                                         } else {
                                             // read the payload line
-                                            String[] setParts = inputLine.split(Pattern.quote("\r\n"));   // with telnet split at \\ instead of \
+                                            String[] setParts = inputLine.split(Pattern.quote("\\r\\n"));   // with telnet split at \\ instead of \ before r and n
                                             String message = setParts[0];
                                             String payload = setParts[1];
                                             request = new Request(clientID, message, "SET", payload);
@@ -213,6 +234,7 @@ public class MyMiddleware {
     private void startWorkerThreads() {
         for(int threadCount = 0; threadCount < numThreadsPTP; threadCount++) {
             WorkerThread wt = new WorkerThread();
+            workerThreads.add(wt);
             wt.start();
         }
     }
@@ -221,10 +243,28 @@ public class MyMiddleware {
         private List<Socket> serverSockets;             // keep server sockets, writers and readers in seperate lists
         private List<PrintWriter> serverWriters;
         private List<BufferedReader> serverReaders;
+        private static int currentIndex= -1;
+        private int workerIndex;
+        private StringBuilder logBuilder;
+
+        public int getWorkerIndex(){
+            return this.workerIndex;
+        }
+
+        public void appendLogString(String str) {
+            this.logBuilder.append(str);
+        }
+
+        public String getFinalLogString() {
+            return this.logBuilder.toString();
+        }
 
         public WorkerThread() {
             try
             {
+                this.workerIndex = ++this.currentIndex;
+                this.logBuilder = new StringBuilder();
+
                 this.serverSockets = new ArrayList<>();
                 this.serverWriters = new ArrayList<>();
                 this.serverReaders = new ArrayList<>();
@@ -359,6 +399,10 @@ public class MyMiddleware {
                 int roundRobinServerIndex = 0;      // server index for round robin load balancing
                 while ((request = requestsQueue.take()) != null)     // read the next request from the requests queue
                 {
+                    appendLogString(Integer.toString(this.workerIndex) + ", ");           // log WorkerIndex
+                    appendLogString(Long.toString(request.getReceiveTime()) + ", ");      // log QueueTime
+                    appendLogString(Long.toString(System.currentTimeMillis()) + ", ");    // log DequeueTime
+
                     int clientID = request.getClientID();       // get the ID of the client who has sent the request
                     String message = request.getMessage();      // get the original request of memtier (client)
                     String requestType = request.getRequestType();
@@ -387,13 +431,17 @@ public class MyMiddleware {
                         // TODO: Log the unrecognized command. Discard all input until a newline arrives.
                     }
 
-                    // if a proper client request command is found and an according response is received from the server
+                    // if a proper client request command is found and an according response is received from the server (either succesfull or failed)
                     if (!serverResponse.equals("")) {
+                        // TODO: Log to output string
+
                         // TODO: Handle the return of "EXCEPTION" as serverResponse
                         if(serverResponse.equals("EXCEPTION")) {
                             // do nothing
+                            appendLogString("-999\n");          // log ClientResponseTime - in the case of exception log a negative value
                         }
                         else {
+                            appendLogString(Long.toString(System.currentTimeMillis()) + "\n");  // log ClientResponseTime
                             netThread.sendServerResponse(clientID, serverResponse + "\r\n");
                         }
 

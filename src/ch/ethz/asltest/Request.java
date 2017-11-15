@@ -6,6 +6,7 @@ public class Request {
     private String message;
     private String requestType; // SET or GET operation
     private String payload;     // data of the SET operation
+    private long receiveTime;    // the time request was received
 
     public Request() {
 
@@ -17,6 +18,7 @@ public class Request {
         this.message = message;
         this.requestType = requestType;
         this.payload = null;        // get requests doesn't have a payload
+        this.receiveTime = System.currentTimeMillis();
     }
 
     // constructor for SET operations
@@ -25,6 +27,7 @@ public class Request {
         this.message = message;
         this.requestType = requestType;
         this.payload = payload;
+        this.receiveTime = System.currentTimeMillis();
     }
 
     public int getClientID () {
@@ -39,5 +42,9 @@ public class Request {
     public String getPayload () {
         return this.payload;
     }
+    public long getReceiveTime() {
+        return receiveTime;
+    }
+
 
 }
