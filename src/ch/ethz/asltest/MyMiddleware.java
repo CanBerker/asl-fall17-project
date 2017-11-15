@@ -137,7 +137,8 @@ public class MyMiddleware {
 
                                         for (int i = 0; i < workerThreads.size(); i++) {
                                             WorkerThread wt = workerThreads.get(i);
-                                            writer.write(wt.getFinalLogString());     // write to file
+                                            writer.write("WorkerIndex, QueueTime, DequeueTime, ClientResponseTime\n");
+                                            writer.append(wt.getFinalLogString());     // write to file
                                             wt.closeThread();           // close worker thread
                                             wt.interrupt();
                                         }
