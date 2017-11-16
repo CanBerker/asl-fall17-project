@@ -25,9 +25,11 @@ public class MyMiddleware {
     protected static List<String> mcAddresses;
     protected int numThreadsPTP;
     protected static boolean readSharded;
+    protected static boolean shutdownReceived;
 
     protected static NetworkThread netThread;
     protected static BlockingQueue<Request> requestsQueue;
+    protected static QueueLengthLogger queueLengthLogger;
     protected static List<WorkerThread> workerThreads;
 
 
@@ -41,38 +43,98 @@ public class MyMiddleware {
         this.mcAddresses = mcAddresses;
         this.numThreadsPTP = numThreadsPTP;
         this.readSharded = readSharded;
+        this.shutdownReceived = false;
 
         this.netThread = new NetworkThread(myIp, networkPort);
+        this.queueLengthLogger = new QueueLengthLogger("queueLengthLog.txt", 1000);
         this.requestsQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
 
     public void run() {
         try {
+            // TODO: get system start time, log in file
+            // TODO: periodically measure queue length
+            // TODO: log hit/miss ratio for gets
+            logStartTime("startTime.txt");
             netThread.start();
+            queueLengthLogger.start();
             startWorkerThreads();
 
-        } catch (Exception e) {
-
+        } catch(Exception e) {
             e.printStackTrace();
         } finally {
 
         }
     }
 
+    private void logStartTime(String fileName) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            writer.write(Long.toString(System.currentTimeMillis()));
+            //writer.append("");
+
+            writer.flush();
+            writer.close();
+        } catch(IOException e) {
+            System.out.println("LOG: logStartTime: Couldn't open log file.");
+            e.printStackTrace();
+        }
+    }
+
+    private static class QueueLengthLogger extends Thread {
+        BufferedWriter writer;          // file to log the file
+        long periodInMs;                // period in miliseconds
+
+        public QueueLengthLogger(String fileName, long periodInMs)
+        {
+            try {
+                this.writer = new BufferedWriter(new FileWriter(fileName));
+                this.periodInMs = periodInMs;
+            } catch(IOException e) {
+                System.out.println("LOG: QueueLengthLogger: Couldn't open log file.");
+                e.printStackTrace();
+            }
+        }
+
+        public void run() {
+            try {
+                while (shutdownReceived == false) {
+                    writer.append(Long.toString(System.currentTimeMillis()) + ", " + Integer.toString(requestsQueue.size()) + "\n");
+                    Thread.sleep(periodInMs);
+                }
+            } catch (IOException e) {
+                System.out.println("LOG: QueueLengthLogger: Couldn't write to log file.");
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                closeThread();
+            }
+
+        }
+
+        private void closeThread() {
+            try {
+                writer.flush();
+                writer.close();
+            } catch(IOException e) {
+                System.out.println("LOG: NetworkThread: Error while closing sockets.");
+                e.printStackTrace();
+            }
+        }
+    }
 
     private static class NetworkThread extends Thread {
         private String myIP;
         private int networkPort;
         private Selector selector;
         ServerSocketChannel networkSocket;
-        private boolean shutdownReceived;
 
-        public NetworkThread(String myIP, int networkPort)
-        {
+
+        public NetworkThread(String myIP, int networkPort) {
             this.myIP = myIP;
             this.networkPort = networkPort;
-            this.shutdownReceived = false;
         }
 
         public void run() {
@@ -90,105 +152,101 @@ public class MyMiddleware {
                 int clientIndex = 0;
                 String inputLine = "";
 
+                int readyChannels = 0;
+
                 System.out.println("Network Thread: Listening ...");
-                while (shutdownReceived == false) {
-                    int readyChannels = selector.select();
-                    if (readyChannels == 0) {
-                        continue;
-                    }
-                    else {
-                        Set selectedKeys = selector.selectedKeys();
-                        Iterator iter = selectedKeys.iterator();
-                        while (iter.hasNext()) {
-                            SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
+                while(shutdownReceived == false) {
+                    if (selector.isOpen()) {
+                        readyChannels = selector.select();
+                        if (readyChannels == 0) {
+                            continue;
+                        } else {
+                            Set selectedKeys = selector.selectedKeys();
+                            Iterator iter = selectedKeys.iterator();
+                            while (iter.hasNext()) {
+                                SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
 
-                            // check if key is valid first to account for key cancelling.
-                            if (!key.isValid()) {
-                                continue;
-                            }
-                            else if (key.isAcceptable()) {
-                                SocketChannel client = networkSocket.accept();
-                                client.configureBlocking(false);
-                                client.register(selector, SelectionKey.OP_READ, clientIndex++);     // attach a client index integer as an object
-                            }
-                            else if (key.isReadable()) {
-                                SocketChannel client = (SocketChannel) key.channel();
-                                int clientID = (int) key.attachment();      // get the client ID from attachment of the key
-                                int numBytesRead = client.read(buffer);
+                                // check if key is valid first to account for key cancelling.
+                                if (!key.isValid()) {
+                                    continue;
+                                } else if (key.isAcceptable()) {
+                                    SocketChannel client = networkSocket.accept();
+                                    client.configureBlocking(false);
+                                    client.register(selector, SelectionKey.OP_READ, clientIndex++);     // attach a client index integer as an object
+                                } else if (key.isReadable()) {
+                                    SocketChannel client = (SocketChannel) key.channel();
+                                    int clientID = (int) key.attachment();      // get the client ID from attachment of the key
+                                    int numBytesRead = client.read(buffer);
 
-                                // if end of stream is received, bytes read is set to -1 meaning socket has been closed(shouldn't happen in a normal run)
-                                if (numBytesRead != -1) {
-                                    inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
-
-                                    // keep reading if the shutdown isn't sent and full packet ending in \r\n hasn't been received yet
-                                    while (!inputLine.startsWith("shutdown") && !inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
-                                        numBytesRead = client.read(buffer);
+                                    // if end of stream is received, bytes read is set to -1 meaning socket has been closed(shouldn't happen in a normal run)
+                                    if (numBytesRead != -1) {
                                         inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
-                                    }
 
-                                    if(inputLine.startsWith("shutdown")) {
-                                        Thread.sleep(1000);
-                                        // TODO: Initialize Logging
-                                        // TODO: Filewriter header column "WorkerIndex, QueueTime, DequeueTime, ClientResponseTime\n"
-
-                                        shutdownReceived = true;
-                                        String fileName = "requestLog.txt";
-                                        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-
-                                        for (int i = 0; i < workerThreads.size(); i++) {
-                                            WorkerThread wt = workerThreads.get(i);
-                                            writer.write("WorkerIndex, QueueTime, DequeueTime, ClientResponseTime\n");
-                                            writer.append(wt.getFinalLogString());     // write to file
-                                            wt.closeThread();           // close worker thread
-                                            wt.interrupt();
+                                        // keep reading if the shutdown isn't sent and full packet ending in \r\n hasn't been received yet
+                                        while (!inputLine.startsWith("shutdown") && !inputLine.substring(inputLine.length() - 2, inputLine.length()).equals("\r\n")) {
+                                            numBytesRead = client.read(buffer);
+                                            inputLine += new String(buffer.array(), 0, numBytesRead, Charset.forName("UTF-8"));
                                         }
 
-                                        writer.flush();
-                                        writer.close();
+                                        if (inputLine.startsWith("shutdown")) {
+                                            Thread.sleep(3000);     // let other threads finish their jobs
 
-                                        break;
-                                    }
-                                    else if(inputLine.substring(inputLine.length()-2, inputLine.length()).equals("\r\n")) {
-                                        inputLine = inputLine.trim();       // remove leading and trailing whitespaces and newlines
-                                        String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
-                                        String requestType = requestParts[0];
+                                            shutdownReceived = true;
+                                            String fileName = "requestLog.txt";
+                                            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 
-                                        Request request;
-                                        if (requestType.equals("get")){
-                                            request = new Request(clientID, inputLine, "GET");
+                                            for (int i = 0; i < workerThreads.size(); i++) {
+                                                WorkerThread wt = workerThreads.get(i);
+                                                writer.write("RequestType, WorkerIndex, RequestSize, ResponseSize, QueueTime, DequeueTime, SendTime, ReceiveTime, ClientResponseTime\n");
+                                                writer.append(wt.logBuilder.toString());     // write to file
+
+                                                requestsQueue.add(new Request("shutdown"));     // add a shutdown command for each worker thread
+                                            }
+
+                                            writer.flush();
+                                            writer.close();
+
+                                            break;
+                                        } else if (inputLine.substring(inputLine.length() - 2, inputLine.length()).equals("\r\n")) {
+                                            inputLine = inputLine.trim();       // remove leading and trailing whitespaces and newlines
+                                            String[] requestParts = inputLine.split(" ");       // split the request and get the requestType
+                                            String requestType = requestParts[0];
+
+                                            Request request;
+                                            if (requestType.equals("get")) {
+                                                request = new Request(clientID, inputLine, "GET");
+                                            } else {
+                                                // read the payload line
+                                                String[] setParts = inputLine.split(Pattern.quote("\r\n"));   // with telnet split at \\ instead of \ before r and n
+                                                String message = setParts[0];
+                                                String payload = setParts[1];
+                                                request = new Request(clientID, message, "SET", payload);
+                                            }
+
+                                            requestsQueue.add(request);
+                                            inputLine = "";     // reset the inputline
                                         } else {
-                                            // read the payload line
-                                            String[] setParts = inputLine.split(Pattern.quote("\\r\\n"));   // with telnet split at \\ instead of \ before r and n
-                                            String message = setParts[0];
-                                            String payload = setParts[1];
-                                            request = new Request(clientID, message, "SET", payload);
+                                            System.out.println("LOG: NetworkThread: Fragmented packet couldn't be recovered");
                                         }
-
-                                        requestsQueue.add(request);
-                                        inputLine = "";     // reset the inputline
+                                    } else {
+                                        key.cancel();
+                                        client.close();
                                     }
-                                    else {
-                                        System.out.println("LOG: NetworkThread: Fragmented packet couldn't be recovered");
-                                    }
-                                }
-                                else {
-                                    key.cancel();
-                                    client.close();
-                                }
 
-                                buffer.clear();
+                                    buffer.clear();
+                                }
+                                iter.remove();
                             }
-                            iter.remove();
                         }
                     }
                 }
-            } catch (IOException e) {
+            } catch(IOException e) {
                 System.out.println("LOG: NetworkThread: Server socket failed to accept connection.");
                 e.printStackTrace();
-            } catch (StringIndexOutOfBoundsException e) {
+            } catch(StringIndexOutOfBoundsException e) {
                 System.out.println("LOG: NetworkThread: String operation failed due to indexing error.");
                 e.printStackTrace();
-            } catch (Exception e) {
+            } catch(Exception e) {
                 System.out.println("LOG: NetworkThread: Exception.");
                 e.printStackTrace();
             } finally {
@@ -200,10 +258,10 @@ public class MyMiddleware {
             try {
                 ByteBuffer buffer;
                 Iterator iter = selector.keys().iterator();
-                while (iter.hasNext()) {
-                    SelectionKey key = (SelectionKey) iter.next();      // casting to selection key for syntax correctness
-                    if (key.attachment() != null && (int) key.attachment() == clientID) {
-                        SocketChannel client = (SocketChannel) key.channel();
+                while(iter.hasNext()) {
+                    SelectionKey key =(SelectionKey) iter.next();      // casting to selection key for syntax correctness
+                    if(key.attachment() != null &&(int) key.attachment() == clientID) {
+                        SocketChannel client =(SocketChannel) key.channel();
                         buffer = ByteBuffer.wrap(serverResponse.getBytes());
 
                         client.write(buffer);
@@ -212,20 +270,23 @@ public class MyMiddleware {
                         continue;
                     }
                 }
-            } catch (IOException e) {
+            } catch(IOException e) {
                 System.out.println("LOG: NetworkThread: Middleware failed to send the server response.");
                 e.printStackTrace();
-            } catch (Exception e) {
+            } catch(ConcurrentModificationException e) {
+                System.out.println("LOG: NetworkThread: A new client has been added to selector keys, effectively changing the iterable count during execution. ");
+                e.printStackTrace();
+            } catch(Exception e) {
                 System.out.println("LOG: NetworkThread: Exception.");
                 e.printStackTrace();
             }
         }
 
-        private void closeThread () {
+        private void closeThread() {
             try {
                 networkSocket.close();
                 selector.close();
-            } catch (IOException e) {
+            } catch(IOException e) {
                 System.out.println("LOG: NetworkThread: Error while closing sockets.");
                 e.printStackTrace();
             }
@@ -247,30 +308,44 @@ public class MyMiddleware {
         private static int currentIndex= -1;
         private int workerIndex;
         private StringBuilder logBuilder;
+        private StringBuilder rowBuilder;
 
         public int getWorkerIndex(){
             return this.workerIndex;
         }
 
-        public void appendLogString(String str) {
-            this.logBuilder.append(str);
+        public void prependLogString(String str) {
+            this.rowBuilder.insert(0, str);
         }
 
-        public String getFinalLogString() {
-            return this.logBuilder.toString();
+        public void appendLogString(String str) {
+            this.rowBuilder.append(str);
         }
+
+        /**
+         * Inserts the given string at the index (seperated by commas)
+         * @param str   string to be inserted
+         * @param index index of the field to insert (for zero, use prepend function)
+         */
+        public void insertLogString(String str, int index) {
+            int commaIndex = nthIndexOf(this.rowBuilder.toString(), ",", index);      // get the index of nth ","
+            this.rowBuilder.insert(commaIndex+2, str);  // skip over the comma and the space with (+2)
+        }
+
+
 
         public WorkerThread() {
             try
             {
                 this.workerIndex = ++this.currentIndex;
                 this.logBuilder = new StringBuilder();
+                this.rowBuilder = new StringBuilder();
 
                 this.serverSockets = new ArrayList<>();
                 this.serverWriters = new ArrayList<>();
                 this.serverReaders = new ArrayList<>();
-                for (String address : mcAddresses) {
-                    String[] addressParts = address.split(":", 2);       // split the IP and port values at the first ":" (limit:2)
+                for(String address : mcAddresses) {
+                    String[] addressParts = address.split(":", 2);       // split the IP and port values at the first ":"(limit:2)
                     String ip = addressParts[0];
                     int port = Integer.parseInt(addressParts[1]);           // cast port to integer
 
@@ -283,7 +358,7 @@ public class MyMiddleware {
                     this.serverReaders.add(new BufferedReader(new InputStreamReader(serverSocket.getInputStream())));
                 }
             }
-            catch (IOException e) {
+            catch(IOException e) {
                 System.out.println("LOG: Worker Thread: Error while creating sockets to servers.");
                 e.printStackTrace();
             }
@@ -293,45 +368,67 @@ public class MyMiddleware {
         // SET -- forwarded to all servers
         public String setOperation(String message, String payload) {
             try {
+                int serverCount = mcAddresses.size();
+                long sendTimeAverage = 0;
                 // Forward the SET request to all servers
-                for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
-                    serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");  // forward message to server (\r is used instead of \r\n due to println function)
+                for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+                    serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");  // forward message to server(\r is used instead of \r\n due to println function)
+                    sendTimeAverage += System.currentTimeMillis();
                 }
-                for (int serverIndex = 0; serverIndex < mcAddresses.size(); serverIndex++) {
-                    String serverResponse = serverReaders.get(serverIndex).readLine();          // read server's response
+                appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
+
+                long receiveTimeAverage = 0;
+                String finalServerResponse = "STORED";
+                String serverResponse = "";
+                for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+                    receiveTimeAverage += System.currentTimeMillis();
+                    serverResponse = serverReaders.get(serverIndex).readLine();          // read server's response(single and short message)
                     // if a server has failed to store the value
-                    if (!serverResponse.equals("STORED")) {
-                        return serverResponse;
+                    if(!serverResponse.equals("STORED")) {
+                        finalServerResponse = serverResponse;
                     }
                 }
-                // if execution reaches here, values were stored successfully
-                return "STORED";
-            }  catch (IOException e) {
+                appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
+
+                /*
+                if(finalServerResponse.equals("STORED")) {
+                    insertLogString(Integer.toString(0) + ", ", 2);
+                } else {
+                    insertLogString(Integer.toString(1) + ", ", 2);             // log if there is an error
+                }
+                */
+
+                // if finalServerResponse weren't changed values were stored successfully
+                return finalServerResponse;
+            }  catch(IOException e) {
                 System.out.println("LOG: Worker Thread - Set Operation : Error occurred during read/write operation with server socket.");
                 e.printStackTrace();
                 return "EXCEPTION";
             }
         }
 
-        // GET -- sent to only one server if (sharding == false)
+        // GET -- sent to only one server if(sharding == false)
         public String getOperation(String message, int roundRobinServerIndex) {
             try {
                 // Forward the GET request to the server with the given round robin index
                 serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server, println adds the "\n"
+                appendLogString(Long.toString(System.currentTimeMillis()) + ", ");      // get is sent to a single server, directly log the send time
+
                 String serverResponse;
                 StringBuilder builder = new StringBuilder();
-                while ((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
+                while((serverResponse = serverReaders.get(roundRobinServerIndex).readLine()) != null) {
                     builder.append(serverResponse);
                     // append responses until "END" message is received
-                    if (!serverResponse.equals("END")) {
+                    if(!serverResponse.equals("END")) {
                         builder.append("\r\n");
                     }
                     else {
                         break;
                     }
                 }
+                appendLogString(Long.toString(System.currentTimeMillis()) + ", ");      // once the whole get operation from the server is completed, log the receive time.
                 return builder.toString();
-            }  catch (IOException e) {
+            }  catch(IOException e) {
                 System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
                 e.printStackTrace();
                 return "EXCEPTION";
@@ -340,42 +437,51 @@ public class MyMiddleware {
 
         // sharded multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
         // since all servers get one request each, does not have an effect on roundRobinServerIndex outside the scope of the function
-        public String shardedMultiGetOperation(String message, int roundRobinServerIndex, String[] keys) {
+        public String shardedMultiGetOperation(String message, int roundRobinServerIndex) {
             try {
+
+                String[] messageParts = message.split(" ", 2);          // split the message at the first space
+                String keyParts = messageParts[1];                                 // second half are keys
+                String[] keys = keyParts.split(" ");                         // split keys on " " and take action based on number of keys and sharding option
+
                 int serverCount = mcAddresses.size();
                 int totalKeyCount = keys.length;
-                int keysPerServer = (int)Math.floor(keys.length/serverCount);
+                int keysPerServer =(int)Math.floor(keys.length/serverCount);
                 int remainingkeyCount = totalKeyCount % serverCount;
                 int totalKeyIndex = 0;       // index used while iterating over the keys array
 
+                long sendTimeAverage = 0;
                 // assign the ~same number of keys to each server(rounded) up and send the requests
-                for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+                for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
                     int serverKeyCount = keysPerServer;
-                    if (remainingkeyCount != 0) {
+                    if(remainingkeyCount != 0) {
                         serverKeyCount += 1;
                         remainingkeyCount -= 1;
                     }
 
                     StringBuilder builder = new StringBuilder("get ");
-                    for (int keyIndex = 0; keyIndex < serverKeyCount; keyIndex++) {
+                    for(int keyIndex = 0; keyIndex < serverKeyCount; keyIndex++) {
                         builder.append(keys[totalKeyIndex]);
                         builder.append(" ");        // tested: last " " before the "\r" doesn't cause any issues
                         totalKeyIndex++;
                     }
 
-                    int selectedServer = (roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
+                    int selectedServer =(roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
 
                     // Forward the GET request to the server with the given round robin index
                     serverWriters.get(selectedServer).println(builder.toString() + "\r");
+                    sendTimeAverage += System.currentTimeMillis();
                 }
+                appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
 
+                long receiveTimeAverage = 0;
                 StringBuilder builder = new StringBuilder();
-                for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
-                    int selectedServer = (roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
+                for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+                    int selectedServer =(roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
                     String serverResponse;
-                    while ((serverResponse = serverReaders.get(selectedServer).readLine()) != null) {
+                    while((serverResponse = serverReaders.get(selectedServer).readLine()) != null) {
                         // append responses until "END" message is received
-                        if (!serverResponse.equals("END")) {
+                        if(!serverResponse.equals("END")) {
                             builder.append(serverResponse);
                             builder.append("\r\n");
                         }
@@ -383,10 +489,12 @@ public class MyMiddleware {
                             break;  // do nothing
                         }
                     }
+                    receiveTimeAverage += System.currentTimeMillis();           // once the whole get operation from a server is completed, log the receive time.
                 }
+                appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
                 builder.append("END");
                 return builder.toString();
-            }  catch (IOException e) {
+            }  catch(IOException e) {
                 System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
                 e.printStackTrace();
                 return "EXCEPTION";
@@ -398,59 +506,75 @@ public class MyMiddleware {
             try {
                 Request request;
                 int roundRobinServerIndex = 0;      // server index for round robin load balancing
-                while ((request = requestsQueue.take()) != null)     // read the next request from the requests queue
+                while(shutdownReceived == false &&(request = requestsQueue.take()) != null)     // read the next request from the requests queue
                 {
-                    appendLogString(Integer.toString(this.workerIndex) + ", ");           // log WorkerIndex
-                    appendLogString(Long.toString(request.getReceiveTime()) + ", ");      // log QueueTime
-                    appendLogString(Long.toString(System.currentTimeMillis()) + ", ");    // log DequeueTime
+                    if(request.isShutdown() == true) {
+                        continue;
+                    }
+                    else {
+                        this.rowBuilder.setLength(0);   // reset rowbuilder
 
-                    int clientID = request.getClientID();       // get the ID of the client who has sent the request
-                    String message = request.getMessage();      // get the original request of memtier (client)
-                    String requestType = request.getRequestType();
+                        appendLogString(Integer.toString(this.workerIndex) + ", ");           // log WorkerIndex
+                        appendLogString(Long.toString(request.getReceiveTime()) + ", ");      // log QueueTime
+                        appendLogString(Long.toString(System.currentTimeMillis()) + ", ");    // log DequeueTime
 
-                    String serverResponse = "";
+                        int clientID = request.getClientID();       // get the ID of the client who has sent the request
+                        String message = request.getMessage();      // get the original request of memtier(client)
+                        String requestType = request.getRequestType();
 
-                    // use requestType to determine the action to take
-                    if (requestType.equals("SET")) {
-                        serverResponse = setOperation(message, request.getPayload());
-                    } else if (requestType.equals("GET")) {
-                        if (readSharded == false) {
-                            serverResponse = getOperation(message, roundRobinServerIndex);
-                        } else {
-                            String[] messageParts = message.split(" ", 2);        // split the message at the first space
-                            String keys = messageParts[1];                                    // second half are keys
-                            String[] keysArray = keys.split(" ");                       // split keys on " " and take action based on number of keys
-                            if (keysArray.length == 1) {
+                        String serverResponse = "";
+                        int requestKeyCount;
+
+                        // use requestType to determine the action to take
+                        // SET Format: set memtier-696 0 10000 32\r\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r\n
+                        // GET Format: get memtier-696 memtier-670\r\n
+                        if(requestType.equals("SET")) {
+                            prependLogString(Integer.toString(0) + ", ");           // log requestType
+                            insertLogString(Integer.toString(0) + ", ", 2);          // log request keyCount, 0 for sets
+                            serverResponse = setOperation(message, request.getPayload());
+                        } else if(requestType.equals("GET")) {
+                            requestKeyCount = count(message, " ");              // number of spaces in request = number of keys in request
+                            if(readSharded == false || requestKeyCount == 1) {
+                                prependLogString(Integer.toString(1) + ", ");           // log requestType
+                                insertLogString(Integer.toString(requestKeyCount) + ", ", 2);           // log request key count
                                 serverResponse = getOperation(message, roundRobinServerIndex);
                             } else {
-                                serverResponse = shardedMultiGetOperation(message, roundRobinServerIndex, keysArray);
+                                prependLogString(Integer.toString(2) + ", ");           // log requestType
+                                insertLogString(Integer.toString(requestKeyCount) + ", ", 2);           // log request key count
+                                serverResponse = shardedMultiGetOperation(message, roundRobinServerIndex);
                             }
-                        }
-                    } else {
-                        // refuse unrecognized requestType
-                        System.out.println("Unrecognized Command. Waiting for a newline to reinitialize.");
-                        // TODO: Log the unrecognized command. Discard all input until a newline arrives.
-                    }
-
-                    // if a proper client request command is found and an according response is received from the server (either succesfull or failed)
-                    if (!serverResponse.equals("")) {
-                        // TODO: Log to output string
-
-                        // TODO: Handle the return of "EXCEPTION" as serverResponse
-                        if(serverResponse.equals("EXCEPTION")) {
-                            // do nothing
-                            appendLogString("-999\n");          // log ClientResponseTime - in the case of exception log a negative value
-                        }
-                        else {
-                            appendLogString(Long.toString(System.currentTimeMillis()) + "\n");  // log ClientResponseTime
-                            netThread.sendServerResponse(clientID, serverResponse + "\r\n");
+                        } else {
+                            // refuse unrecognized requestType
+                            System.out.println("Unrecognized Command. Waiting for a newline to reinitialize.");
+                            // TODO: Log the unrecognized command. Discard all input until a newline arrives.
                         }
 
-                        // increment the round robin index and take modulo with number of servers
-                        roundRobinServerIndex = (roundRobinServerIndex + 1) % mcAddresses.size();
+                        // if a proper client request command is found and an according response is received from the server(either succesfull or failed)
+                        if(!serverResponse.equals("")) {
+                            // TODO: Handle the return of "EXCEPTION" as serverResponse
+                            if(serverResponse.equals("EXCEPTION")) {
+                                // do nothing
+                                appendLogString("-999\n");          // log ClientResponseTime - in the case of exception log a negative value
+                            }
+                            else {
+
+                                // responses to set requests are 1 liners - no "\r\n
+                                // responses to gets/multi-gets contain 2 rows for each key and a row with only "END" at the end
+                                int responseKeyCount = (count(serverResponse, "\r\n")) / 2;
+                                insertLogString(Integer.toString(responseKeyCount) + ", ", 3);
+
+                                appendLogString(Long.toString(System.currentTimeMillis()) + "\n");  // log ClientResponseTime
+                                netThread.sendServerResponse(clientID, serverResponse + "\r\n");
+
+                                this.logBuilder.append(this.rowBuilder.toString());     // add the line to the total log
+                            }
+
+                            // increment the round robin index and take modulo with number of servers
+                            roundRobinServerIndex =(roundRobinServerIndex + 1) % mcAddresses.size();
+                        }
                     }
                 }
-            } catch (InterruptedException e) {
+            } catch(InterruptedException e) {
                 System.out.println("LOG: Worker Thread: Error while reading from the requests queue.");
                 e.printStackTrace();
             } finally {
@@ -458,18 +582,57 @@ public class MyMiddleware {
             }
         }
 
-        private void closeThread () {
+        private void closeThread() {
             try {
-                for (int arrayIndex = 0; arrayIndex < serverSockets.size(); arrayIndex++) {
+                for(int arrayIndex = 0; arrayIndex < serverSockets.size(); arrayIndex++) {
                     serverReaders.get(arrayIndex).close();
                     serverWriters.get(arrayIndex).close();
                     serverSockets.get(arrayIndex).close();
                 }
-            } catch (IOException e) {
+            } catch(IOException e) {
                 System.out.println("LOG: WorkerThread: Error while closing readers, writers or sockets.");
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Return the <i>nth</i> index of the given token occurring in the given string.
+     *
+     * @param string     String to search.
+     * @param token      Token to match.
+     * @param index      <i>Nth</i> index.
+     * @return           Index of <i>nth</i> item or -1.
+     */
+    public static int nthIndexOf(final String string, final String token, final int index) {
+        int j = 0;
+        for (int i = 0; i < index; i++)
+        {
+            j = string.indexOf(token, j + 1);
+            if (j == -1) break;
+        }
+        return j;
+    }
+
+    /**
+     * Count the number of instances of substring within a string.
+     *
+     * @param string     String to look for substring in.
+     * @param substring  Sub-string to look for.
+     * @return           Count of substrings in string.
+     */
+    public static int count(final String string, final String substring)
+    {
+        int count = 0;
+        int idx = 0;
+
+        while ((idx = string.indexOf(substring, idx)) != -1)
+        {
+            idx++;
+            count++;
+        }
+
+        return count;
     }
 
 }

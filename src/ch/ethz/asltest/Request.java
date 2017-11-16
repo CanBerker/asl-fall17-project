@@ -2,6 +2,7 @@ package ch.ethz.asltest;
 
 public class Request {
 
+    private boolean shutdown;   // if this is a special type of request called "Shutdown"
     private int clientID;       // id of the client who made the request
     private String message;
     private String requestType; // SET or GET operation
@@ -14,6 +15,7 @@ public class Request {
 
     // constructor for GET operations
     public Request(int clientID, String message, String requestType) {
+        this.shutdown = false;
         this.clientID = clientID;
         this.message = message;
         this.requestType = requestType;
@@ -23,6 +25,7 @@ public class Request {
 
     // constructor for SET operations
     public Request(int clientID, String message, String requestType, String payload) {
+        this.shutdown = false;
         this.clientID = clientID;
         this.message = message;
         this.requestType = requestType;
@@ -46,5 +49,16 @@ public class Request {
         return receiveTime;
     }
 
+
+    // constructor for Shutdown request
+    public Request(String str) {
+        if (str.startsWith("shutdown")) {
+            this.shutdown = true;
+        }
+    }
+
+    public boolean isShutdown () {
+        return this.shutdown;
+    }
 
 }
