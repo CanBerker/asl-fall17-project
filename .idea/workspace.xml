@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/queueLengthLog.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/requestLog.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/startTime.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requestLog.txt" afterPath="$PROJECT_DIR$/requestLog.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RunExp1.sh" afterPath="$PROJECT_DIR$/RunExp1.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
     </list>
@@ -20,34 +24,47 @@
       <file leaf-file-name="Request.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="19" column="31" lean-forward="false" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+            <state relative-caret-position="84">
+              <caret line="6" column="40" lean-forward="false" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
               <folding>
                 <element signature="method#Request#0;class#Request#0" expanded="false" />
+                <element signature="e#1735#1736#0" expanded="true" />
+                <element signature="e#1769#1770#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="60" column="38" lean-forward="true" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
+            <state relative-caret-position="168">
+              <caret line="27" column="35" lean-forward="false" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-                <element signature="e#14228#14229#0" expanded="true" />
-                <element signature="e#14282#14283#0" expanded="true" />
-                <element signature="e#14333#14334#0" expanded="true" />
-                <element signature="e#14384#14385#0" expanded="true" />
+                <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -58,31 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="queueLengthLog.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/queueLengthLog.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="requestLog.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/requestLog.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="106430" column="85" lean-forward="true" selection-start-line="106430" selection-start-column="85" selection-end-line="106430" selection-end-column="85" />
+            <state relative-caret-position="210">
+              <caret line="15" column="191" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="191" />
               <folding />
             </state>
           </provider>
@@ -155,12 +152,12 @@
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/RequestQueue.java" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Response.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="/usr/lib/jvm/java-8-oracle/jre/lib/rt.jar!/sun/misc/Unsafe.class" />
-        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
-        <option value="$PROJECT_DIR$/requestLog.txt" />
         <option value="$PROJECT_DIR$/queueLengthLog.txt" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/requestLog.txt" />
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
+        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
       </list>
     </option>
   </component>
@@ -186,8 +183,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -210,7 +206,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -440,30 +437,30 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17769273" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17933297" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39928487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39928487" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24986331" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -527,18 +524,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -562,6 +570,8 @@
           <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
           <folding>
             <element signature="method#Request#0;class#Request#0" expanded="false" />
+            <element signature="e#1735#1736#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -581,18 +591,29 @@
           <caret line="307" column="17" lean-forward="false" selection-start-line="307" selection-start-column="17" selection-end-line="307" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -616,6 +637,8 @@
           <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
           <folding>
             <element signature="method#Request#0;class#Request#0" expanded="false" />
+            <element signature="e#1735#1736#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -643,18 +666,29 @@
           <caret line="83" column="32" lean-forward="false" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -670,6 +704,8 @@
           <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
           <folding>
             <element signature="method#Request#0;class#Request#0" expanded="false" />
+            <element signature="e#1735#1736#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -705,18 +741,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -740,6 +787,8 @@
           <caret line="18" column="74" lean-forward="false" selection-start-line="18" selection-start-column="74" selection-end-line="18" selection-end-column="74" />
           <folding>
             <element signature="method#Request#0;class#Request#0" expanded="false" />
+            <element signature="e#1735#1736#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -758,18 +807,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -793,6 +853,8 @@
           <caret line="18" column="74" lean-forward="false" selection-start-line="18" selection-start-column="74" selection-end-line="18" selection-end-column="74" />
           <folding>
             <element signature="method#Request#0;class#Request#0" expanded="false" />
+            <element signature="e#1735#1736#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -811,18 +873,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -846,18 +919,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -889,18 +973,29 @@
           <caret line="65" column="17" lean-forward="true" selection-start-line="65" selection-start-column="17" selection-end-line="65" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -916,18 +1011,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
@@ -984,19 +1090,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/startTime.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="13" lean-forward="true" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/jre/lib/rt.jar!/sun/nio/ch/EPollArrayWrapper.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
           <caret line="225" column="23" lean-forward="false" selection-start-line="225" selection-start-column="23" selection-end-line="225" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1004,7 +1101,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
           <caret line="1041" column="0" lean-forward="false" selection-start-line="1041" selection-start-column="0" selection-end-line="1041" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1012,68 +1108,88 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
           <caret line="1436" column="0" lean-forward="false" selection-start-line="1436" selection-start-column="0" selection-end-line="1436" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state relative-caret-position="210">
+          <caret line="15" column="191" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="191" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requestLog.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14">
+          <caret line="1" column="40" lean-forward="false" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/startTime.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/queueLengthLog.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="28">
+          <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="6" column="40" lean-forward="false" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+          <folding>
+            <element signature="method#Request#0;class#Request#0" expanded="false" />
+            <element signature="e#1735#1736#0" expanded="true" />
+            <element signature="e#1769#1770#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="60" column="38" lean-forward="true" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
+        <state relative-caret-position="168">
+          <caret line="27" column="35" lean-forward="false" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="e#14228#14229#0" expanded="true" />
-            <element signature="e#14282#14283#0" expanded="true" />
-            <element signature="e#14333#14334#0" expanded="true" />
-            <element signature="e#14384#14385#0" expanded="true" />
+            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#count#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#count#0;class#MyMiddleware#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="19" column="31" lean-forward="false" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
-          <folding>
-            <element signature="method#Request#0;class#Request#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requestLog.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="106430" column="85" lean-forward="true" selection-start-line="106430" selection-start-column="85" selection-end-line="106430" selection-end-column="85" />
-          <folding />
         </state>
       </provider>
     </entry>

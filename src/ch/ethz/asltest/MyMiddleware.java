@@ -1,9 +1,7 @@
 package ch.ethz.asltest;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -68,6 +66,10 @@ public class MyMiddleware {
         }
     }
 
+    /**
+     * Logs the starting time of the program
+     * @param fileName      File to log
+     */
     private void logStartTime(String fileName) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
@@ -82,10 +84,18 @@ public class MyMiddleware {
         }
     }
 
+    /**
+     * Seperate thread running periodic checks to log the queuelength
+     */
     private static class QueueLengthLogger extends Thread {
         BufferedWriter writer;          // file to log the file
         long periodInMs;                // period in miliseconds
 
+        /**
+         * Constructor Function
+         * @param fileName      name of the log file
+         * @param periodInMs    period between two logging instances in milliseconds
+         */
         public QueueLengthLogger(String fileName, long periodInMs)
         {
             try {
@@ -125,13 +135,20 @@ public class MyMiddleware {
         }
     }
 
+    /**
+     * The thread that receives all connections over input port
+     */
     private static class NetworkThread extends Thread {
         private String myIP;
         private int networkPort;
         private Selector selector;
         ServerSocketChannel networkSocket;
 
-
+        /**
+         * Default constructor
+         * @param myIP      ip of the machine running the middlware
+         * @param networkPort       the port that the middleware listens on
+         */
         public NetworkThread(String myIP, int networkPort) {
             this.myIP = myIP;
             this.networkPort = networkPort;
@@ -214,13 +231,13 @@ public class MyMiddleware {
 
                                             Request request;
                                             if (requestType.equals("get")) {
-                                                request = new Request(clientID, inputLine, "GET");
+                                                request = new Request(clientID, inputLine, "GET", client);
                                             } else {
                                                 // read the payload line
                                                 String[] setParts = inputLine.split(Pattern.quote("\r\n"));   // with telnet split at \\ instead of \ before r and n
                                                 String message = setParts[0];
                                                 String payload = setParts[1];
-                                                request = new Request(clientID, message, "SET", payload);
+                                                request = new Request(clientID, message, "SET", payload, client);
                                             }
 
                                             requestsQueue.add(request);
@@ -254,34 +271,9 @@ public class MyMiddleware {
             }
         }
 
-        public void sendServerResponse(int clientID, String serverResponse) {
-            try {
-                ByteBuffer buffer;
-                Iterator iter = selector.keys().iterator();
-                while(iter.hasNext()) {
-                    SelectionKey key =(SelectionKey) iter.next();      // casting to selection key for syntax correctness
-                    if(key.attachment() != null &&(int) key.attachment() == clientID) {
-                        SocketChannel client =(SocketChannel) key.channel();
-                        buffer = ByteBuffer.wrap(serverResponse.getBytes());
-
-                        client.write(buffer);
-                    }
-                    else {
-                        continue;
-                    }
-                }
-            } catch(IOException e) {
-                System.out.println("LOG: NetworkThread: Middleware failed to send the server response.");
-                e.printStackTrace();
-            } catch(ConcurrentModificationException e) {
-                System.out.println("LOG: NetworkThread: A new client has been added to selector keys, effectively changing the iterable count during execution. ");
-                e.printStackTrace();
-            } catch(Exception e) {
-                System.out.println("LOG: NetworkThread: Exception.");
-                e.printStackTrace();
-            }
-        }
-
+        /**
+         * Network socket and selector is closed
+         */
         private void closeThread() {
             try {
                 networkSocket.close();
@@ -293,6 +285,9 @@ public class MyMiddleware {
         }
     }
 
+    /**
+     * starts the parametrized number of worker threads
+     */
     private void startWorkerThreads() {
         for(int threadCount = 0; threadCount < numThreadsPTP; threadCount++) {
             WorkerThread wt = new WorkerThread();
@@ -301,6 +296,10 @@ public class MyMiddleware {
         }
     }
 
+    /**
+     * The threads that handle the making of requests and forwarding of responses for SET, GET, MULTI-GET operations
+     * Also LOGGING is implemented during request processing
+     */
     private static class WorkerThread extends Thread {
         private List<Socket> serverSockets;             // keep server sockets, writers and readers in seperate lists
         private List<PrintWriter> serverWriters;
@@ -310,14 +309,26 @@ public class MyMiddleware {
         private StringBuilder logBuilder;
         private StringBuilder rowBuilder;
 
+        /**
+         * Returns the index assigned to the worker thread
+         * @return
+         */
         public int getWorkerIndex(){
             return this.workerIndex;
         }
 
+        /**
+         * Preprend the given string to the current log row
+         * @param str   string to prepend
+         */
         public void prependLogString(String str) {
             this.rowBuilder.insert(0, str);
         }
 
+        /**
+         * Append the given string to the current log row
+         * @param str   string to append
+         */
         public void appendLogString(String str) {
             this.rowBuilder.append(str);
         }
@@ -332,8 +343,10 @@ public class MyMiddleware {
             this.rowBuilder.insert(commaIndex+2, str);  // skip over the comma and the space with (+2)
         }
 
-
-
+        /**
+         * Default constructor
+         * Assigns worker index, creates log builders, initializes read-write connections between the middleware and the servers
+         */
         public WorkerThread() {
             try
             {
@@ -349,7 +362,7 @@ public class MyMiddleware {
                     String ip = addressParts[0];
                     int port = Integer.parseInt(addressParts[1]);           // cast port to integer
 
-                    System.out.println(ip + " " + port);
+                    // System.out.println(ip + " " + port);
 
                     Socket serverSocket = new Socket(ip,port);
                     this.serverSockets.add(serverSocket);
@@ -364,8 +377,12 @@ public class MyMiddleware {
             }
         }
 
-
-        // SET -- forwarded to all servers
+        /**
+         * SET operation is forwarded to all servers
+         * @param message   full message of the request
+         * @param payload   payload data of the request
+         * @return          response of the server
+         */
         public String setOperation(String message, String payload) {
             try {
                 int serverCount = mcAddresses.size();
@@ -407,7 +424,12 @@ public class MyMiddleware {
             }
         }
 
-        // GET -- sent to only one server if(sharding == false)
+        /**
+         * GET request if forwarded to only one server if sharding is not enabled or number of keys is 1
+         * @param message       full message of the request
+         * @param roundRobinServerIndex     server index to give the request to
+         * @return              response of the server
+         */
         public String getOperation(String message, int roundRobinServerIndex) {
             try {
                 // Forward the GET request to the server with the given round robin index
@@ -435,8 +457,13 @@ public class MyMiddleware {
             }
         }
 
-        // sharded multi-GET case -- shard the get command into multiple requests to different servers, collect the results and evaluate together
-        // since all servers get one request each, does not have an effect on roundRobinServerIndex outside the scope of the function
+        /**
+         * MULTI-GET(sharded) shard the get command into multiple requests to different servers, collect the results and evaluate together
+         * since all servers get one request each, roundRobinServerIndex is not updated globally
+         * @param message       full message of the request
+         * @param roundRobinServerIndex     server index to give the first request to
+         * @return              response of the server
+         */
         public String shardedMultiGetOperation(String message, int roundRobinServerIndex) {
             try {
 
@@ -564,7 +591,16 @@ public class MyMiddleware {
                                 insertLogString(Integer.toString(responseKeyCount) + ", ", 3);
 
                                 appendLogString(Long.toString(System.currentTimeMillis()) + "\n");  // log ClientResponseTime
-                                netThread.sendServerResponse(clientID, serverResponse + "\r\n");
+
+                                // forward the server response to client
+                                serverResponse = serverResponse + "\r\n";
+                                ByteBuffer buffer = ByteBuffer.wrap(serverResponse.getBytes());
+                                SocketChannel channel = request.getChannel();
+                                try {
+                                    channel.write(buffer);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
                                 this.logBuilder.append(this.rowBuilder.toString());     // add the line to the total log
                             }
@@ -582,6 +618,9 @@ public class MyMiddleware {
             }
         }
 
+        /**
+         * Middlware - Server sockets are closed
+         */
         private void closeThread() {
             try {
                 for(int arrayIndex = 0; arrayIndex < serverSockets.size(); arrayIndex++) {

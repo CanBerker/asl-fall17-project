@@ -1,5 +1,7 @@
 package ch.ethz.asltest;
 
+import java.nio.channels.SocketChannel;
+
 public class Request {
 
     private boolean shutdown;   // if this is a special type of request called "Shutdown"
@@ -8,29 +10,32 @@ public class Request {
     private String requestType; // SET or GET operation
     private String payload;     // data of the SET operation
     private long receiveTime;    // the time request was received
+    private SocketChannel channel;  // channel the request came through
 
     public Request() {
 
     }
 
     // constructor for GET operations
-    public Request(int clientID, String message, String requestType) {
+    public Request(int clientID, String message, String requestType, SocketChannel channel) {
         this.shutdown = false;
         this.clientID = clientID;
         this.message = message;
         this.requestType = requestType;
         this.payload = null;        // get requests doesn't have a payload
         this.receiveTime = System.currentTimeMillis();
+        this.channel = channel;
     }
 
     // constructor for SET operations
-    public Request(int clientID, String message, String requestType, String payload) {
+    public Request(int clientID, String message, String requestType, String payload, SocketChannel channel) {
         this.shutdown = false;
         this.clientID = clientID;
         this.message = message;
         this.requestType = requestType;
         this.payload = payload;
         this.receiveTime = System.currentTimeMillis();
+        this.channel = channel;
     }
 
     public int getClientID () {
@@ -48,7 +53,9 @@ public class Request {
     public long getReceiveTime() {
         return receiveTime;
     }
-
+    public SocketChannel getChannel() {
+        return channel;
+    }
 
     // constructor for Shutdown request
     public Request(String str) {

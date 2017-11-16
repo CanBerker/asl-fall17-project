@@ -82,6 +82,20 @@ wait
 
 # implement VC Client Count loop
 
+clients=(1 2)
+threads=(2 4 8 16)
+
+
+for c in "${clients[@]}"; do
+	for th in "${threads[@]}"; do
+		#add parameters to the command
+		cmd="${cmdpart} --server=${server} --test-time=${time} --clients=${c} --threads=${th}"
+		#run the command
+		echo $cmd
+		$cmd
+	done
+done
+
 
 now=$(date +"%Y%m%d_%H%M%S")
 for IDc in "${IDclients[@]}"; do
@@ -93,7 +107,7 @@ for IDc in "${IDclients[@]}"; do
 	screen -d -m -S pinger bash -c 'timeout $(($testTime+2)) ping -i ${pingInterval} ${prefix}${IDserver}${suffix} > ${dirname}/${now}_ping_${IDc}_${IDservers[0]}.log'
 	screen -d -m -S memtier bash -c '/home/can/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[0]}${suffix} --port=11211 --protocol=memcache_text --threads=${threadCount} --clients=${virtualClientCount} --test-time=${testTime} --ratio=${ratio} --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --out-file=${dirname}/${now}_report_${IDc}_${IDservers[0]}.txt'
 	
-	# add more ping report screens per active server
+	# add more ping reports on screen per active server
 
 	EOSSH
 ) &
