@@ -1,3 +1,5 @@
+sudo add-apt-repository ppa:openjdk-r/ppa  
+sudo apt-get update
 sudo apt-get install git unzip ant openjdk-7-jdk 
 # removed memcached
 wget https://github.com/RedisLabs/memtier_benchmark/archive/master.zip 
@@ -9,7 +11,7 @@ autoreconf -ivf
 make 
 # sudo service memcached stop
 
-mkdir -p memcached
+mkdir -p memcached_install
 cd memcached_install
 wget http://www.memcached.org/files/memcached-1.5.2.tar.gz
 tar -zxvf memcached-1.5.2.tar.gz
