@@ -24,6 +24,7 @@ public class MyMiddleware {
     protected int numThreadsPTP;
     protected static boolean readSharded;
     protected static boolean shutdownReceived;
+    protected static long timestampSimplifier;
 
     protected static NetworkThread netThread;
     protected static BlockingQueue<Request> requestsQueue;
@@ -42,9 +43,10 @@ public class MyMiddleware {
         this.numThreadsPTP = numThreadsPTP;
         this.readSharded = readSharded;
         this.shutdownReceived = false;
+        this.timestampSimplifier = 0;       // simplifier is subtracted from all timestamps in the program to shorten the numbers that have higher accuracy than neeeded
 
         this.netThread = new NetworkThread(myIp, networkPort);
-        this.queueLengthLogger = new QueueLengthLogger("queueLengthLog.txt", 1000);
+        this.queueLengthLogger = new QueueLengthLogger("queueLengthLog.csv", 1000);
         this.requestsQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
@@ -73,7 +75,10 @@ public class MyMiddleware {
     private void logStartTime(String fileName) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-            writer.write(Long.toString(System.currentTimeMillis()));
+            long startTime = System.currentTimeMillis();
+            this.timestampSimplifier = getSimplifier(startTime);
+            writer.write(Long.toString(startTime));
+
             //writer.append("");
 
             writer.flush();
@@ -83,6 +88,32 @@ public class MyMiddleware {
             e.printStackTrace();
         }
     }
+
+    /**
+     * This function calculates the timestamp simplifier which is used to shorten the numbers returned by System.currentTimeMillis()
+     * The static method System.currentTimeMillis() returns the time since January 1st 1970 in milliseconds.
+     * An average experiment lasts around 60 seconds, so saving the results in the precision of 1000 seconds = 10000000 milliseconds is sufficient
+     * Setting this number as the simplification rate, the number is rounded.
+     *      Rounding down to neaest 100 -> i = i/100 * 100
+     * This simplifier is then subtracted from all the other timestamps in the program
+     *
+     * @return long simplifier
+     */
+    private long getSimplifier(long startTime) {
+
+        int simplificationStep = 1000000;
+        long simplifier = (startTime / simplificationStep) * simplificationStep;
+        return simplifier;
+    }
+
+    /**
+     * Get current timestamp in the system simplified to the accuracy of 100 seconds
+     * @return  long timestamp
+     */
+    private static long getTimeStamp() {
+        return System.currentTimeMillis() - timestampSimplifier;
+    }
+
 
     /**
      * Seperate thread running periodic checks to log the queuelength
@@ -100,6 +131,7 @@ public class MyMiddleware {
         {
             try {
                 this.writer = new BufferedWriter(new FileWriter(fileName));
+                writer.write("Timestamp, QueueLength\n");
                 this.periodInMs = periodInMs;
             } catch(IOException e) {
                 System.out.println("LOG: QueueLengthLogger: Couldn't open log file.");
@@ -110,7 +142,7 @@ public class MyMiddleware {
         public void run() {
             try {
                 while (shutdownReceived == false) {
-                    writer.append(Long.toString(System.currentTimeMillis()) + ", " + Integer.toString(requestsQueue.size()) + "\n");
+                    writer.append(Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + "\n");
                     Thread.sleep(periodInMs);
                 }
             } catch (IOException e) {
@@ -209,7 +241,7 @@ public class MyMiddleware {
                                             Thread.sleep(3000);     // let other threads finish their jobs
 
                                             shutdownReceived = true;
-                                            String fileName = "requestLog.txt";
+                                            String fileName = "requestLog.csv";
                                             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 
                                             for (int i = 0; i < workerThreads.size(); i++) {
@@ -231,13 +263,13 @@ public class MyMiddleware {
 
                                             Request request;
                                             if (requestType.equals("get")) {
-                                                request = new Request(clientID, inputLine, "GET", client);
+                                                request = new Request(clientID, inputLine, "GET", client, getTimeStamp());
                                             } else {
                                                 // read the payload line
                                                 String[] setParts = inputLine.split(Pattern.quote("\r\n"));   // with telnet split at \\ instead of \ before r and n
                                                 String message = setParts[0];
                                                 String payload = setParts[1];
-                                                request = new Request(clientID, message, "SET", payload, client);
+                                                request = new Request(clientID, message, "SET", payload, client, getTimeStamp());
                                             }
 
                                             requestsQueue.add(request);
@@ -390,7 +422,7 @@ public class MyMiddleware {
                 // Forward the SET request to all servers
                 for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
                     serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");  // forward message to server(\r is used instead of \r\n due to println function)
-                    sendTimeAverage += System.currentTimeMillis();
+                    sendTimeAverage += getTimeStamp();
                 }
                 appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
 
@@ -398,7 +430,7 @@ public class MyMiddleware {
                 String finalServerResponse = "STORED";
                 String serverResponse = "";
                 for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
-                    receiveTimeAverage += System.currentTimeMillis();
+                    receiveTimeAverage += getTimeStamp();
                     serverResponse = serverReaders.get(serverIndex).readLine();          // read server's response(single and short message)
                     // if a server has failed to store the value
                     if(!serverResponse.equals("STORED")) {
@@ -434,7 +466,7 @@ public class MyMiddleware {
             try {
                 // Forward the GET request to the server with the given round robin index
                 serverWriters.get(roundRobinServerIndex).println(message + "\r");      // forward request to server, println adds the "\n"
-                appendLogString(Long.toString(System.currentTimeMillis()) + ", ");      // get is sent to a single server, directly log the send time
+                appendLogString(Long.toString(getTimeStamp()) + ", ");      // get is sent to a single server, directly log the send time
 
                 String serverResponse;
                 StringBuilder builder = new StringBuilder();
@@ -448,7 +480,7 @@ public class MyMiddleware {
                         break;
                     }
                 }
-                appendLogString(Long.toString(System.currentTimeMillis()) + ", ");      // once the whole get operation from the server is completed, log the receive time.
+                appendLogString(Long.toString(getTimeStamp()) + ", ");      // once the whole get operation from the server is completed, log the receive time.
                 return builder.toString();
             }  catch(IOException e) {
                 System.out.println("LOG: Worker Thread - Get Operation : Error occurred during read/write operation with server socket.");
@@ -497,7 +529,7 @@ public class MyMiddleware {
 
                     // Forward the GET request to the server with the given round robin index
                     serverWriters.get(selectedServer).println(builder.toString() + "\r");
-                    sendTimeAverage += System.currentTimeMillis();
+                    sendTimeAverage += getTimeStamp();
                 }
                 appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
 
@@ -516,7 +548,7 @@ public class MyMiddleware {
                             break;  // do nothing
                         }
                     }
-                    receiveTimeAverage += System.currentTimeMillis();           // once the whole get operation from a server is completed, log the receive time.
+                    receiveTimeAverage += getTimeStamp();           // once the whole get operation from a server is completed, log the receive time.
                 }
                 appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
                 builder.append("END");
@@ -543,7 +575,7 @@ public class MyMiddleware {
 
                         appendLogString(Integer.toString(this.workerIndex) + ", ");           // log WorkerIndex
                         appendLogString(Long.toString(request.getReceiveTime()) + ", ");      // log QueueTime
-                        appendLogString(Long.toString(System.currentTimeMillis()) + ", ");    // log DequeueTime
+                        appendLogString(Long.toString(getTimeStamp()) + ", ");    // log DequeueTime
 
                         int clientID = request.getClientID();       // get the ID of the client who has sent the request
                         String message = request.getMessage();      // get the original request of memtier(client)
@@ -590,7 +622,7 @@ public class MyMiddleware {
                                 int responseKeyCount = (count(serverResponse, "\r\n")) / 2;
                                 insertLogString(Integer.toString(responseKeyCount) + ", ", 3);
 
-                                appendLogString(Long.toString(System.currentTimeMillis()) + "\n");  // log ClientResponseTime
+                                appendLogString(Long.toString(getTimeStamp()) + "\n");  // log ClientResponseTime
 
                                 // forward the server response to client
                                 serverResponse = serverResponse + "\r\n";

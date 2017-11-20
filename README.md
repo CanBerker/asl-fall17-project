@@ -18,7 +18,7 @@ https://github.com/RedisLabs/memtier_benchmark/
 
 	* Only sets:
 	```
-	memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=1 --clients=1 --threads=1
+	memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=60 --clients=64 --threads=2
 	```
 
 	* Balanced operations with added histogram:  

@@ -17,24 +17,24 @@ public class Request {
     }
 
     // constructor for GET operations
-    public Request(int clientID, String message, String requestType, SocketChannel channel) {
+    public Request(int clientID, String message, String requestType, SocketChannel channel, long receiveTime) {
         this.shutdown = false;
         this.clientID = clientID;
         this.message = message;
         this.requestType = requestType;
         this.payload = null;        // get requests doesn't have a payload
-        this.receiveTime = System.currentTimeMillis();
+        this.receiveTime = receiveTime;
         this.channel = channel;
     }
 
     // constructor for SET operations
-    public Request(int clientID, String message, String requestType, String payload, SocketChannel channel) {
+    public Request(int clientID, String message, String requestType, String payload, SocketChannel channel, long receiveTime) {
         this.shutdown = false;
         this.clientID = clientID;
         this.message = message;
         this.requestType = requestType;
         this.payload = payload;
-        this.receiveTime = System.currentTimeMillis();
+        this.receiveTime = receiveTime;
         this.channel = channel;
     }
 
