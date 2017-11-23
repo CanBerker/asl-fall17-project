@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ASL_Documents/templateRunExp.sh" afterPath="$PROJECT_DIR$/ASL_Documents/templateRunExp.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RunExp1.sh" afterPath="$PROJECT_DIR$/RunExp1.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,8 +29,8 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="234" column="23" lean-forward="false" selection-start-line="234" selection-start-column="23" selection-end-line="234" selection-end-column="23" />
+            <state relative-caret-position="2030">
+              <caret line="238" column="0" lean-forward="true" selection-start-line="238" selection-start-column="0" selection-end-line="238" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
@@ -86,36 +82,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="561">
               <caret line="58" column="71" lean-forward="false" selection-start-line="58" selection-start-column="71" selection-end-line="58" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="requestLog.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/requestLog.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16">
-              <caret line="7191" column="50" lean-forward="true" selection-start-line="7191" selection-start-column="50" selection-end-line="7191" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="queueLengthLog.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/queueLengthLog.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="startTime.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/startTime.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -470,7 +436,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="-3" width="1871" height="978" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1196,8 +1161,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="234" column="23" lean-forward="false" selection-start-line="234" selection-start-column="23" selection-end-line="234" selection-end-column="23" />
+        <state relative-caret-position="2030">
+          <caret line="238" column="0" lean-forward="true" selection-start-line="238" selection-start-column="0" selection-end-line="238" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
