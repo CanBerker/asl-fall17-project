@@ -46,7 +46,7 @@ public class MyMiddleware {
         this.timestampSimplifier = 0;       // simplifier is subtracted from all timestamps in the program to shorten the numbers that have higher accuracy than neeeded
 
         this.netThread = new NetworkThread(myIp, networkPort);
-        this.queueLengthLogger = new QueueLengthLogger("queueLengthLog.csv", 1000);
+        this.queueLengthLogger = new QueueLengthLogger("logOutputs/queueLengthLog.csv", 1000);
         this.requestsQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
@@ -56,7 +56,7 @@ public class MyMiddleware {
             // TODO: get system start time, log in file
             // TODO: periodically measure queue length
             // TODO: log hit/miss ratio for gets
-            logStartTime("startTime.txt");
+            logStartTime("logOutputs/startTime.txt");
             netThread.start();
             queueLengthLogger.start();
             startWorkerThreads();
@@ -241,7 +241,7 @@ public class MyMiddleware {
                                             Thread.sleep(3000);     // let other threads finish their jobs
 
                                             shutdownReceived = true;
-                                            String fileName = "requestLog.csv";
+                                            String fileName = "logOutputs/requestLog.csv";
                                             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 
                                             for (int i = 0; i < workerThreads.size(); i++) {
