@@ -46,6 +46,7 @@ public class MyMiddleware {
         this.timestampSimplifier = 0;       // simplifier is subtracted from all timestamps in the program to shorten the numbers that have higher accuracy than neeeded
 
         this.netThread = new NetworkThread(myIp, networkPort);
+        this.queueLengthLogger = new QueueLengthLogger("logOutputs/queueLengthLog.csv", 1000);
         this.requestsQueue = new LinkedBlockingQueue<>();
         this.workerThreads = new ArrayList<>();
     }
@@ -54,15 +55,8 @@ public class MyMiddleware {
         try {
             // TODO: log hit/miss ratio for gets
 
-            File file = new File("logOutputs");
-            if (!file.canWrite()) {
-                file.setWritable(true,false);
-            }
-            file.mkdirs();
-
             logStartTime("logOutputs/startTime.txt");
             netThread.start();
-            this.queueLengthLogger = new QueueLengthLogger("logOutputs/queueLengthLog.csv", 1000);
             queueLengthLogger.start();
             startWorkerThreads();
 
