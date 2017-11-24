@@ -57,7 +57,7 @@ public class MyMiddleware {
 
             File file = new File("../../../../../../logOutputs");
             if (!file.canWrite()) {
-                file.setWritable(false);
+                file.setWritable(true);
             }
             file.mkdirs();
 
