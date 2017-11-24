@@ -29,8 +29,8 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="29" column="37" lean-forward="false" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
+            <state relative-caret-position="419">
+              <caret line="51" column="5" lean-forward="true" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
@@ -38,6 +38,7 @@
                 <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -64,16 +65,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RunMW.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14">
-              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
@@ -95,7 +86,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>==</find>
       <find>commandName</find>
       <find>command name</find>
       <find>!=</find>
@@ -125,6 +115,7 @@
       <find>getTimeStamp</find>
       <find>System.currentTimeMillis()</find>
       <find>myIp</find>
+      <find>logout</find>
     </findStrings>
     <replaceStrings>
       <replace>ClientInputHandler</replace>
@@ -545,6 +536,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -608,6 +600,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -679,6 +672,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -750,6 +744,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -812,6 +807,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -874,6 +870,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -918,6 +915,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -970,6 +968,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -1006,6 +1005,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -1130,16 +1130,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        <state relative-caret-position="308">
+          <caret line="59" column="100" lean-forward="true" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="100" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="29" column="37" lean-forward="false" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
+        <state relative-caret-position="419">
+          <caret line="51" column="5" lean-forward="true" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
@@ -1147,6 +1147,7 @@
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
