@@ -55,7 +55,15 @@ public class MyMiddleware {
         try {
             // TODO: log hit/miss ratio for gets
 
-            new File("../../../../../../logOutputs").mkdirs();
+            File file = new File("../../../../../../logOutputs");
+            if (file.canWrite()) {
+                file.mkdirs();
+            }
+            else
+            {
+                System.out.println( "WHAT THE HELL MAN");
+            }
+
             logStartTime("logOutputs/startTime.txt");
             netThread.start();
             queueLengthLogger.start();

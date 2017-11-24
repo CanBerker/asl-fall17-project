@@ -30,8 +30,8 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="55" column="37" lean-forward="false" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="37" />
+            <state relative-caret-position="308">
+              <caret line="64" column="13" lean-forward="true" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
@@ -1115,8 +1115,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="55" column="37" lean-forward="false" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="37" />
+        <state relative-caret-position="308">
+          <caret line="64" column="13" lean-forward="true" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
