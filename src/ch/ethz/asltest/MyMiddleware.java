@@ -56,13 +56,10 @@ public class MyMiddleware {
             // TODO: log hit/miss ratio for gets
 
             File file = new File("../../../../../../logOutputs");
-            if (file.canWrite()) {
-                file.mkdirs();
+            if (!file.canWrite()) {
+                file.setWritable(false);
             }
-            else
-            {
-                System.out.println( "WHAT THE HELL MAN");
-            }
+            file.mkdirs();
 
             logStartTime("logOutputs/startTime.txt");
             netThread.start();
