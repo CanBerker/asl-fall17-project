@@ -1,6 +1,7 @@
 package ch.ethz.asltest;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -189,7 +190,8 @@ public class MyMiddleware {
             try {
                 selector =  Selector.open();
                 networkSocket = ServerSocketChannel.open();
-                networkSocket.bind(new InetSocketAddress(myIP, networkPort));
+                InetAddress IP = InetAddress.getByName(myIP);
+                networkSocket.bind(new InetSocketAddress(IP, networkPort));
                 networkSocket.configureBlocking(false);
                 networkSocket.register(selector, SelectionKey.OP_ACCEPT);
                 ByteBuffer buffer = ByteBuffer.allocate(2048);  // israf vol 1 :D
