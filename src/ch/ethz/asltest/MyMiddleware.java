@@ -53,9 +53,9 @@ public class MyMiddleware {
 
     public void run() {
         try {
-            // TODO: get system start time, log in file
-            // TODO: periodically measure queue length
             // TODO: log hit/miss ratio for gets
+
+            new File("../../../../../../logOutputs").mkdirs();
             logStartTime("logOutputs/startTime.txt");
             netThread.start();
             queueLengthLogger.start();
