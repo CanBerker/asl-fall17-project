@@ -35,6 +35,8 @@ pingInterval=1
 
 pingSafetyTime=2
 testSafetyTime=3
+mwStartSafetyTime=5
+mwLoggingSafetyTime=6
 
 
 
@@ -178,7 +180,7 @@ experimentName="experiment2"
 partName="part1"
 
 IDservers=(6) #(6 7 8)
-IDmws=(4)
+IDmws=(5)
 IDclients=(1) #(1 2 3)
 
 threadCount=1
@@ -210,40 +212,55 @@ wait
 
 
 
-#TODO: ITERATE OVER WORKER THREAD COUNTS
-
-# part to control the middleware
-for IDmw in "${IDmws[@]}"; do
-(
-    ssh ${prefix}${IDmw}${suffix} << EOSSH 
-    screen -d -m -S mw bash -c 'java -jar $remoteHome/${dirNameMw}/dist/middleware-ccikis.jar -l ${prefix}${IDmw}${suffix} -p ${middlewarePort} -t 1 -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}'
-
-EOSSH
-) &
-done
-
-
 
 # part to control the clients
 for modeIndex in {0..1}; do
     for r in $(seq 1 $repeatCount); do
         for c in "${virtualClientCount[@]}"; do
-            for IDc in "${IDclients[@]}"; do
-            (
-                ssh -T ${prefix}${IDc}${suffix} << EOSSH 
-                mkdir -p $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
+            for t in "${workerThreadCount[@]}"; do
 
-                screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${pingFileName}.${pingFileExtension}"
-
-                screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${port} --protocol=memcache_text --threads=${threadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${reportFileName}.${reportFileExtension}"
-                
+                # part to control the middleware -- mw private IPs : machine4 - 10.0.0.8 , machine5- 10.0.0.9 (+4 from machine number -- coincidental)
+                for IDmw in "${IDmws[@]}"; do
+                (
+                    ssh ${prefix}${IDmw}${suffix} << EOSSH 
+                    screen -d -m -S mw bash -c 'java -jar $remoteHome/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw + 4})) -p ${middlewarePort} -t 16 -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}'
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-            ) &
+) &
+                done
+
+                sleep ${mwStartSafetyTime}
+
+
+                for IDc in "${IDclients[@]}"; do
+                (
+                    ssh -T ${prefix}${IDc}${suffix} << EOSSH 
+                    mkdir -p $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
+
+                    screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${pingFileName}.${pingFileExtension}"
+
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${port} --protocol=memcache_text --threads=${threadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${reportFileName}.${reportFileExtension}"
+                    
+
+# EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
+EOSSH
+                ) &
+                done
+                wait
+                sleep $((${testTime}+${testSafetyTime}))
+
+
+                # close middlewares
+                for IDmw in "${IDmws[@]}"; do
+                    { echo "shutdown"; } | telnet ${prefix}${IDmw}${suffix} 11211
+                done
+
+                # wait for logs to be produced
+                sleep ${mwLoggingSafetyTime}
+
+
             done
-            wait
-            sleep $((${testTime}+${testSafetyTime}))
         done
     done
 done
@@ -297,41 +314,47 @@ wait
 # POPULATE MEMCACHED SERVERS IF NEEDED, HALT SCRIPT IN THE MEAN TIME
 
 
-#TODO: ITERATE OVER WORKER THREAD COUNTS
-
-# part to control the middleware
-for IDmw in "${IDmws[@]}"; do
-(
-    ssh ${prefix}${IDmw}${suffix} << EOSSH 
-    screen -d -m -S mw bash -c 'java -jar $remoteHome/${dirNameMw}/dist/middleware-ccikis.jar -l ${prefix}${IDmw}${suffix} -p ${middlewarePort} -t 1 -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort}'
-
-EOSSH
-) &
-done
 
 
-# part to control the clients
 for modeIndex in {0..1}; do
     for r in $(seq 1 $repeatCount); do
         for c in "${virtualClientCount[@]}"; do
-            for IDc in "${IDclients[@]}"; do
-            (
-                ssh -T ${prefix}${IDc}${suffix} << EOSSH 
-                mkdir -p $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
+            for t in "${workerThreadCount[@]}"; do
 
-                screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${pingFileName}.${pingFileExtension}"
-                screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[1]}_${pingFileName}.${pingFileExtension}"
-
-                screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${port} --protocol=memcache_text --threads=${threadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${reportFileName}.${reportFileExtension}"
-                screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${port} --protocol=memcache_text --threads=${threadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[1]}_${reportFileName}.${reportFileExtension}"
-                
+                # part to control the middleware -- mw private IPs : machine4 - 10.0.0.8 , machine5- 10.0.0.9 (+4 from machine number -- coincidental)
+                for IDmw in "${IDmws[@]}"; do
+                (
+                    ssh ${prefix}${IDmw}${suffix} << EOSSH 
+                    screen -d -m -S mw bash -c 'java -jar $remoteHome/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw + 4})) -p ${middlewarePort} -t 16 -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort}'
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-            ) &
+) &
+                done
+
+                sleep ${mwStartSafetyTime}
+
+
+                # part to control the clients
+                for IDc in "${IDclients[@]}"; do
+                (
+                    ssh -T ${prefix}${IDc}${suffix} << EOSSH 
+                    mkdir -p $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
+
+                    screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${pingFileName}.${pingFileExtension}"
+                    screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > $remoteHome/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[1]}_${pingFileName}.${pingFileExtension}"
+
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${port} --protocol=memcache_text --threads=${threadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[0]}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${port} --protocol=memcache_text --threads=${threadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${r}_${c}_${IDc}_${IDmws[1]}_${reportFileName}.${reportFileExtension}"
+                    
+
+# EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
+EOSSH
+                ) &
+                done
+                wait
+                sleep $((${testTime}+${testSafetyTime}))
             done
-            wait
-            sleep $((${testTime}+${testSafetyTime}))
         done
     done
 done

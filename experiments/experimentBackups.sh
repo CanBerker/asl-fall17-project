@@ -1,8 +1,19 @@
 #!/bin/bash
 
-
-
 ################# BACKUPS ###################
+
+# sample configs
+
+#mw1-2
+10.0.0.8
+10.0.0.9
+
+middleware-ccikis.jar -l 10.0.0.9 -p 16399 -t 16 -s false -m canforaslvms6.westeurope.cloudapp.azure.com:11211
+./memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server canforaslvms5.westeurope.cloudapp.azure.com --test-time=10 --clients=16 --threads=2
+
+
+
+
 
 #parameter from command line
 

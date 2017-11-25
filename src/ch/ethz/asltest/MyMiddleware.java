@@ -69,15 +69,21 @@ public class MyMiddleware {
     }
 
     /**
-     * Logs the starting time of the program
+     * Initializes the timestamp simplifier
+     * Logs the starting time of the program     *
+     * Logging is currently disabled as start time can be inferred from queuelengthlogger's first entry
      * @param fileName      File to log
      */
     private void logStartTime(String fileName) {
+
+        long startTime = System.currentTimeMillis();
+        this.timestampSimplifier = getSimplifier(startTime);
+        /*
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
             long startTime = System.currentTimeMillis();
             this.timestampSimplifier = getSimplifier(startTime);
-            writer.write(Long.toString(startTime));
+            writer.write(Long.toString(getTimeStamp()));
 
             //writer.append("");
 
@@ -87,6 +93,7 @@ public class MyMiddleware {
             System.out.println("LOG: logStartTime: Couldn't open log file.");
             e.printStackTrace();
         }
+        */
     }
 
     /**

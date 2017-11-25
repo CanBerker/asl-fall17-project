@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/experiments/RunExperiments.sh" afterPath="$PROJECT_DIR$/experiments/RunExperiments.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/experiments/experimentBackups.sh" afterPath="$PROJECT_DIR$/experiments/experimentBackups.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -29,15 +32,14 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="587">
-              <caret line="193" column="75" lean-forward="true" selection-start-line="193" selection-start-column="75" selection-end-line="193" selection-end-column="75" />
+            <state relative-caret-position="330">
+              <caret line="71" column="42" lean-forward="false" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-                <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-                <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="e#4261#4262#0" expanded="true" />
+                <element signature="e#4332#4333#0" expanded="true" />
                 <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
                 <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -65,11 +67,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="RunMW.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="728">
+              <caret line="68" column="9" lean-forward="true" selection-start-line="68" selection-start-column="9" selection-end-line="68" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="392">
-              <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -86,7 +98,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>commandName</find>
       <find>command name</find>
       <find>!=</find>
       <find>string</find>
@@ -116,6 +127,7 @@
       <find>System.currentTimeMillis()</find>
       <find>myIp</find>
       <find>logout</find>
+      <find>getTimeSta</find>
     </findStrings>
     <replaceStrings>
       <replace>ClientInputHandler</replace>
@@ -174,8 +186,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -198,8 +208,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -458,7 +470,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18589394" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18753417" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32896304" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -474,6 +486,7 @@
     </layout>
   </component>
   <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.csv" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.md" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -524,51 +537,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#closeThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#getWorkerIndex#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#prependLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#appendLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#insertLogString#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#WorkerThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#setOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#shardedMultiGetOperation#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#closeThread#0;class#WorkerThread#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#nthIndexOf#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="docComment;method#count#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#count#0;class#MyMiddleware#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="45" column="0" lean-forward="true" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="98">
@@ -594,11 +562,10 @@
           <caret line="307" column="17" lean-forward="false" selection-start-line="307" selection-start-column="17" selection-end-line="307" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -666,11 +633,10 @@
           <caret line="83" column="32" lean-forward="false" selection-start-line="83" selection-start-column="32" selection-end-line="83" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -738,11 +704,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -801,11 +766,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -864,11 +828,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -909,11 +872,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -962,11 +924,10 @@
           <caret line="65" column="17" lean-forward="true" selection-start-line="65" selection-start-column="17" selection-end-line="65" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -999,11 +960,10 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
@@ -1090,9 +1050,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/startTime.txt" />
     <entry file="file://$PROJECT_DIR$/requestLog.txt" />
     <entry file="file://$PROJECT_DIR$/queueLengthLog.txt" />
+    <entry file="file://$PROJECT_DIR$/logOutputs/queueLengthLog.csv" />
+    <entry file="file://$PROJECT_DIR$/logOutputs/requestLog.csv" />
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1103,49 +1072,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logOutputs/queueLengthLog.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/logOutputs/requestLog.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/RunMW.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="59" column="100" lean-forward="true" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="100" />
+        <state relative-caret-position="728">
+          <caret line="68" column="9" lean-forward="true" selection-start-line="68" selection-start-column="9" selection-end-line="68" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/startTime.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requestLog.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/queueLengthLog.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="6" column="9" lean-forward="true" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="193" column="75" lean-forward="true" selection-start-line="193" selection-start-column="75" selection-end-line="193" selection-end-column="75" />
+        <state relative-caret-position="330">
+          <caret line="71" column="42" lean-forward="false" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
-            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#getTimeStamp#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="e#4261#4262#0" expanded="true" />
+            <element signature="e#4332#4333#0" expanded="true" />
             <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
             <element signature="docComment;method#NetworkThread#0;class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
