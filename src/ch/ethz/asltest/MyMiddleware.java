@@ -251,10 +251,10 @@ public class MyMiddleware {
                                             shutdownReceived = true;
                                             String fileName = "requestLog.csv";
                                             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+                                            writer.write("RequestType, WorkerIndex, RequestSize, ResponseSize, QueueTime, DequeueTime, SendTime, ReceiveTime, ClientResponseTime\n");
 
                                             for (int i = 0; i < workerThreads.size(); i++) {
                                                 WorkerThread wt = workerThreads.get(i);
-                                                writer.write("RequestType, WorkerIndex, RequestSize, ResponseSize, QueueTime, DequeueTime, SendTime, ReceiveTime, ClientResponseTime\n");
                                                 writer.append(wt.logBuilder.toString());     // write to file
 
                                                 requestsQueue.add(new Request("shutdown"));     // add a shutdown command for each worker thread
