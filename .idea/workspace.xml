@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/experiments/RunExperiments.sh" afterPath="$PROJECT_DIR$/experiments/RunExperiments.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +29,8 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="254" column="0" lean-forward="true" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
+            <state relative-caret-position="295">
+              <caret line="243" column="35" lean-forward="false" selection-start-line="243" selection-start-column="35" selection-end-line="243" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
@@ -1123,8 +1122,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="254" column="0" lean-forward="true" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
+        <state relative-caret-position="295">
+          <caret line="243" column="35" lean-forward="false" selection-start-line="243" selection-start-column="35" selection-end-line="243" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;method#logStartTime#0;class#MyMiddleware#0" expanded="false" />
