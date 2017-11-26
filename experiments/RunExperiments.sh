@@ -224,7 +224,7 @@ for modeIndex in {0..1}; do
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c 'java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t 16 -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}'
+                    screen -d -m -S mw bash -c 'java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}'
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
@@ -334,7 +334,7 @@ for modeIndex in {0..1}; do
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c 'java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t 16 -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}'
+                    screen -d -m -S mw bash -c 'java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}'
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
