@@ -152,10 +152,10 @@ public class MyMiddleware {
                 while (shutdownReceived == false) {
                     String queueLog;
                     if(braceYourselvesRequestsAreComing == false) {
-                        queueLog = Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + ", false" + "\n";
+                        queueLog = Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + ", 0" + "\n";
                     }
                     else {
-                        queueLog = Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + ", true" + "\n";
+                        queueLog = Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + ", 1" + "\n";
                     }
                     writer.append(queueLog);
                     Thread.sleep(periodInMs);
