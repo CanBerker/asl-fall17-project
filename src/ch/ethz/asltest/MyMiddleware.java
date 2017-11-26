@@ -26,7 +26,6 @@ public class MyMiddleware {
     protected static boolean readSharded;
     protected static boolean shutdownReceived;
     protected static long timestampSimplifier;
-    protected static boolean braceYourselvesRequestsAreComing;
 
     protected static NetworkThread netThread;
     protected static BlockingQueue<Request> requestsQueue;
@@ -139,7 +138,7 @@ public class MyMiddleware {
         {
             try {
                 this.writer = new BufferedWriter(new FileWriter(fileName));
-                writer.write("Timestamp, QueueLength, Active\n");
+                writer.write("Timestamp, QueueLength\n");
                 this.periodInMs = periodInMs;
             } catch(IOException e) {
                 System.out.println("LOG: QueueLengthLogger: Couldn't open log file.");
@@ -150,14 +149,7 @@ public class MyMiddleware {
         public void run() {
             try {
                 while (shutdownReceived == false) {
-                    String queueLog;
-                    if(braceYourselvesRequestsAreComing == false) {
-                        queueLog = Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + ", 0" + "\n";
-                    }
-                    else {
-                        queueLog = Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + ", 1" + "\n";
-                    }
-                    writer.append(queueLog);
+                    writer.append(Long.toString(getTimeStamp()) + ", " + Integer.toString(requestsQueue.size()) + "\n");
                     Thread.sleep(periodInMs);
                 }
             } catch (IOException e) {
@@ -583,11 +575,6 @@ public class MyMiddleware {
                 int roundRobinServerIndex = 0;      // server index for round robin load balancing
                 while(shutdownReceived == false &&(request = requestsQueue.take()) != null)     // read the next request from the requests queue
                 {
-                    if (braceYourselvesRequestsAreComing == false)
-                    {
-                        braceYourselvesRequestsAreComing = true;
-                    }
-
                     if(request.isShutdown() == true) {
                         continue;
                     }
