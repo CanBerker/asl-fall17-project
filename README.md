@@ -18,7 +18,7 @@ https://github.com/RedisLabs/memtier_benchmark/
 
 	* Only sets:
 	```
-	memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=60 --clients=64 --threads=2
+	memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=60 --clients=32 --threads=2
 	```
 
 	* Balanced operations with added histogram:  
@@ -26,6 +26,10 @@ https://github.com/RedisLabs/memtier_benchmark/
 	memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:1 --expiry-range=9999-10000 --key-maximum=1000 --server 127.0.0.1 --test-time=1 --clients=1 --threads=1
 	```
 
+	* Mixed operations with multi-gets:
+	```
+	memtier_benchmark --port=11211 --protocol=memcache_text --ratio=1:10 --multi-key-get=6 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=5 --clients=50 --threads=4
+	```
 
 
 Start server with custom port and verbose mode:
