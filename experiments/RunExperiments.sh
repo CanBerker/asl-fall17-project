@@ -570,13 +570,18 @@ for IDs in "${IDservers[@]}"; do
     mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
     #rm -f ${dirName}/*   # clear previous logs if necessary
     
+    # POPULATE MEMCACHED SERVERS
     screen -d -m -S memcached bash -c 'memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}'
+    screen -d -m -S memtier1 bash -c '${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram'
+    screen -d -m -S memtier2 bash -c '${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram'
+    screen -d -m -S memtier3 bash -c '${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram'
 EOSSH
 ) &
 done
 wait
 
-# POPULATE MEMCACHED SERVERS IF NEEDED, HALT SCRIPT IN THE MEAN TIME
+#WAIT WHILE MEMCACHED SERVERS ARE BEING POPULATED
+sleep 60
 
 
 for c in "${virtualClientCount[@]}"; do
@@ -691,14 +696,18 @@ for IDs in "${IDservers[@]}"; do
     mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
     #rm -f ${dirName}/*   # clear previous logs if necessary
     
+    # POPULATE MEMCACHED SERVERS
     screen -d -m -S memcached bash -c 'memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}'
+    screen -d -m -S memtier1 bash -c '${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram'
+    screen -d -m -S memtier2 bash -c '${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram'
+    screen -d -m -S memtier3 bash -c '${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram'
 EOSSH
 ) &
 done
 wait
 
-# POPULATE MEMCACHED SERVERS IF NEEDED, HALT SCRIPT IN THE MEAN TIME
-
+#WAIT WHILE MEMCACHED SERVERS ARE BEING POPULATED
+sleep 60
 
 for c in "${virtualClientCount[@]}"; do
     for t in "${workerThreadCount[@]}"; do

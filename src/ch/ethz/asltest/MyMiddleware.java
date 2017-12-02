@@ -426,34 +426,28 @@ public class MyMiddleware {
         public String setOperation(String message, String payload) {
             try {
                 int serverCount = mcAddresses.size();
-                long sendTimeAverage = 0;
+                // long sendTimeAverage = 0;
                 // Forward the SET request to all servers
                 for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
                     serverWriters.get(serverIndex).println(message + "\r\n" + payload + "\r");  // forward message to server(\r is used instead of \r\n due to println function)
-                    sendTimeAverage += getTimeStamp();
+                    // sendTimeAverage += getTimeStamp();
                 }
-                appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
+                // appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
+                appendLogString(Long.toString(getTimeStamp()) + ", ");
 
-                long receiveTimeAverage = 0;
+                // long receiveTimeAverage = 0;
                 String finalServerResponse = "STORED";
                 String serverResponse = "";
                 for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
-                    receiveTimeAverage += getTimeStamp();
+                    // receiveTimeAverage += getTimeStamp();
                     serverResponse = serverReaders.get(serverIndex).readLine();          // read server's response(single and short message)
                     // if a server has failed to store the value
                     if(!serverResponse.equals("STORED")) {
                         finalServerResponse = serverResponse;
                     }
                 }
-                appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
-
-                /*
-                if(finalServerResponse.equals("STORED")) {
-                    insertLogString(Integer.toString(0) + ", ", 2);
-                } else {
-                    insertLogString(Integer.toString(1) + ", ", 2);             // log if there is an error
-                }
-                */
+                // appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
+                appendLogString(Long.toString(getTimeStamp()) + ", ");
 
                 // if finalServerResponse weren't changed values were stored successfully
                 return finalServerResponse;
@@ -517,7 +511,7 @@ public class MyMiddleware {
                 int remainingkeyCount = totalKeyCount % serverCount;
                 int totalKeyIndex = 0;       // index used while iterating over the keys array
 
-                long sendTimeAverage = 0;
+                // long sendTimeAverage = 0;
                 // assign the ~same number of keys to each server(rounded) up and send the requests
                 for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
                     int serverKeyCount = keysPerServer;
@@ -537,11 +531,12 @@ public class MyMiddleware {
 
                     // Forward the GET request to the server with the given round robin index
                     serverWriters.get(selectedServer).println(builder.toString() + "\r");
-                    sendTimeAverage += getTimeStamp();
+                    // sendTimeAverage += getTimeStamp();
                 }
-                appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
+                // appendLogString(Long.toString(sendTimeAverage/serverCount) + ", ");    // log averaged send time
+                appendLogString(Long.toString(getTimeStamp()) + ", ");
 
-                long receiveTimeAverage = 0;
+                // long receiveTimeAverage = 0;
                 StringBuilder builder = new StringBuilder();
                 for(int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
                     int selectedServer =(roundRobinServerIndex+serverIndex) % serverCount;     // roundRobin pointer goes to first server after using the last server
@@ -556,9 +551,11 @@ public class MyMiddleware {
                             break;  // do nothing
                         }
                     }
-                    receiveTimeAverage += getTimeStamp();           // once the whole get operation from a server is completed, log the receive time.
+                    // receiveTimeAverage += getTimeStamp();           // once the whole get operation from a server is completed, log the receive time.
                 }
-                appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
+                // appendLogString(Long.toString(receiveTimeAverage/serverCount) + ", ");    // log averaged receive time
+                appendLogString(Long.toString(getTimeStamp()) + ", ");
+
                 builder.append("END");
                 return builder.toString();
             }  catch(IOException e) {

@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41419019-8bad-4e66-a026-e462beeee869" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ASL_Documents/report-outline20.pdf" afterPath="$PROJECT_DIR$/ASL_Documents/report-outline20.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/experiments/RunExperiments.sh" afterPath="$PROJECT_DIR$/experiments/RunExperiments.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" afterPath="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +18,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="20" column="4" lean-forward="false" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="192" />
+            <state relative-caret-position="715">
+              <caret line="59" column="73" lean-forward="true" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="73" />
               <folding />
             </state>
           </provider>
@@ -30,19 +28,13 @@
       <file leaf-file-name="MyMiddleware.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="251" column="73" lean-forward="true" selection-start-line="251" selection-start-column="73" selection-end-line="251" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="queueLengthLog.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/queueLengthLog.csv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3836">
-              <caret line="274" column="10" lean-forward="false" selection-start-line="274" selection-start-column="10" selection-end-line="274" selection-end-column="10" />
-              <folding />
+            <state relative-caret-position="1389">
+              <caret line="536" column="70" lean-forward="false" selection-start-line="536" selection-start-column="70" selection-end-line="536" selection-end-column="70" />
+              <folding>
+                <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+                <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -58,7 +50,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>string</find>
       <find>127.0</find>
       <find>system</find>
       <find>ClientHandler</find>
@@ -88,6 +79,7 @@
       <find>getTimeSta</find>
       <find>reqıest</find>
       <find>request</find>
+      <find>workerthread</find>
     </findStrings>
     <replaceStrings>
       <replace>ClientInputHandler</replace>
@@ -119,8 +111,8 @@
         <option value="$PROJECT_DIR$/src/ch/ethz/asltest/Request.java" />
         <option value="$PROJECT_DIR$/requestLog.txt" />
         <option value="$PROJECT_DIR$/queueLengthLog.txt" />
-        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java" />
       </list>
     </option>
   </component>
@@ -146,6 +138,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -168,10 +162,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,6 +408,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="18" width="1873" height="993" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -429,7 +422,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19518863" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19737561" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -508,16 +501,20 @@
     <entry file="file://$PROJECT_DIR$/queueLengthLog.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3836">
-          <caret line="274" column="10" lean-forward="true" selection-start-line="274" selection-start-column="10" selection-end-line="274" selection-end-column="10" />
+          <caret line="274" column="10" lean-forward="false" selection-start-line="274" selection-start-column="10" selection-end-line="274" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3290">
-          <caret line="235" column="62" lean-forward="true" selection-start-line="235" selection-start-column="62" selection-end-line="235" selection-end-column="62" />
-          <folding />
+        <state relative-caret-position="3514">
+          <caret line="251" column="73" lean-forward="true" selection-start-line="251" selection-start-column="73" selection-end-line="251" selection-end-column="73" />
+          <folding>
+            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -532,16 +529,56 @@
     <entry file="file://$PROJECT_DIR$/queueLengthLog.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3836">
-          <caret line="274" column="10" lean-forward="false" selection-start-line="274" selection-start-column="10" selection-end-line="274" selection-end-column="10" />
+          <caret line="274" column="10" lean-forward="true" selection-start-line="274" selection-start-column="10" selection-end-line="274" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="251" column="73" lean-forward="true" selection-start-line="251" selection-start-column="73" selection-end-line="251" selection-end-column="73" />
+        <state relative-caret-position="3290">
+          <caret line="235" column="62" lean-forward="true" selection-start-line="235" selection-start-column="62" selection-end-line="235" selection-end-column="62" />
+          <folding>
+            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/queueLengthLog.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3836">
+          <caret line="274" column="10" lean-forward="false" selection-start-line="274" selection-start-column="10" selection-end-line="274" selection-end-column="10" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="715">
+          <caret line="59" column="73" lean-forward="true" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="12" column="33" lean-forward="false" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ch/ethz/asltest/MyMiddleware.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1389">
+          <caret line="536" column="70" lean-forward="false" selection-start-line="536" selection-start-column="70" selection-end-line="536" selection-end-column="70" />
+          <folding>
+            <element signature="method#getSimplifier#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#QueueLengthLogger#0;class#MyMiddleware#0" expanded="false" />
+            <element signature="class#NetworkThread#0;class#MyMiddleware#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
