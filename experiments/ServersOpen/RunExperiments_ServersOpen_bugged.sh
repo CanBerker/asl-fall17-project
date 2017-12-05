@@ -312,7 +312,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-) &
+                ) &
                 done
                 wait
             done
@@ -413,7 +413,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-) &             
+                ) &             
                 done
                 wait
             done

@@ -5,16 +5,6 @@
 # sample configs
 
 #mw1-2
-10.0.0.8
-10.0.0.9
-
-java -jar asl-fall17-project/dist/middleware-ccikis.jar -l 10.0.0.8 -p 16399 -t 64 -s false -m canforaslvms6.westeurope.cloudapp.azure.com:11211
-java -jar asl-fall17-project/dist/middleware-ccikis.jar -l 10.0.0.9 -p 16399 -t 64 -s false -m canforaslvms6.westeurope.cloudapp.azure.com:11211
-
-./memtier_benchmark --port=16399 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server canforaslvms4.westeurope.cloudapp.azure.com --test-time=10 --clients=16 --threads=2
-
-
-
 
 
 
@@ -30,8 +20,6 @@ done
 wait
 
 echo "lel"
-
-
 
 
 

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+ssh canforaslvms9.westeurope.cloudapp.azure.com
+screen -S coordinator
+
 # general variables
 remoteHome="/home/can"
 localpchome="/home/can/asl-experiments"
@@ -29,9 +33,9 @@ mwRequestFileName="requestLog"
 mwRequestFileExtension="csv"
 
 
-repeatCount=3
+repeatCount=1
 
-testTime=60
+testTime=2
 pingInterval=1
 
 mwStartSafetyTime=8
@@ -39,21 +43,7 @@ pingSafetyTime=2
 testSafetyTime=2
 mwLoggingSafetyTime=6
 
-
-
-# experiment configurations
-experimentName="experiment1"
-partName="part1"
-
-IDservers=(6)
-IDclients=(1 2 3)
-
-memtierThreadCount=2
-virtualClientCount=(1 8 16 24 32 64 96)
-
-serverPort=11211
-
-
+IDservers=(6 7 8)
 # part to control the server
 for IDs in "${IDservers[@]}"; do
 (
@@ -66,6 +56,18 @@ EOSSH
 ) &
 done
 wait
+
+
+# experiment configurations
+experimentName="experiment1"
+partName="part1"
+
+IDclients=(1 2 3)
+
+memtierThreadCount=2
+virtualClientCount=(1 8)
+
+serverPort=11211
 
 
 
@@ -94,41 +96,18 @@ EOSSH
 done
 
 
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
-
+> Experiment_1_1.done
 
 
 experimentName="experiment1"
 partName="part2"
 
-IDservers=(6 7)
 IDclients=(1)
 
 memtierThreadCount=1
-virtualClientCount=(1 8 16 24 32 64 96)
+virtualClientCount=(1 8 )
 
 serverPort=11211
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
-
 
 
 # part to control the clients
@@ -157,14 +136,7 @@ EOSSH
     done
 done
 
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
+> Experiment_1_2.done
 
 
 #################################################################################################################################################
@@ -179,35 +151,17 @@ wait
 experimentName="experiment2"
 partName="part1"
 
-IDservers=(6)
 IDmws=(4)
 IDclients=(1)
 
 memtierThreadCount=2
-virtualClientCount=(1 8 16 24 32 64 96)
-workerThreadCount=(8 16 32 64)
+virtualClientCount=(1 8)
+workerThreadCount=(8 16)
 
 serverPort=11211
 middlewarePort=16399
 
 sharded="false"
-
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
-
-
 
 
 for c in "${virtualClientCount[@]}"; do
@@ -277,48 +231,23 @@ EOSSH
 done
 
 
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
-
+> Experiment_2_1.done
 
 
 experimentName="experiment2"
 partName="part2"
 
-IDservers=(6)
 IDmws=(4 5)
 IDclients=(1)
 
 memtierThreadCount=1
-virtualClientCount=(1 8 16 24 32 64 96)
-workerThreadCount=(8 16 32 64)
+virtualClientCount=(1 8)
+workerThreadCount=(8 16)
 
 serverPort=11211
 middlewarePort=16399
 
 sharded="false"
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
-
 
 
 for c in "${virtualClientCount[@]}"; do
@@ -392,17 +321,7 @@ done
 
 
 
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
-
-
+> Experiment_2_2.done
 
 
 #################################################################################################################################################
@@ -417,13 +336,12 @@ wait
 experimentName="experiment3"
 partName="part1"
 
-IDservers=(6 7 8)
 IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(1 8 16 24 32 64 96)
-workerThreadCount=(8 16 32 64)
+virtualClientCount=(1 8)
+workerThreadCount=(8 16)
 
 serverPort=11211
 middlewarePort=16399
@@ -432,21 +350,6 @@ sharded="false"
 
 modeName=("writeonly")
 modeRatio=("1:0")
-
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
 
 
 
@@ -503,7 +406,7 @@ EOSSH
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
                     mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
-
+                    
                     mv ${remoteHome}/${mwQueueFileName}.${mwQueueFileExtension} ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDmw}_${r}_${mwQueueFileName}.${mwQueueFileExtension}
 
                     mv ${remoteHome}/${mwRequestFileName}.${mwRequestFileExtension} ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDmw}_${r}_${mwRequestFileName}.${mwRequestFileExtension}
@@ -519,19 +422,7 @@ EOSSH
     done
 done
 
-
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
-
-
-
+> Experiment_3_1.done
 
 #################################################################################################################################################
 #################################################################################################################################################
@@ -545,12 +436,11 @@ wait
 experimentName="experiment4"
 partName="part1"
 
-IDservers=(6 7 8)
 IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(1 8 16 24 32 64 96)
+virtualClientCount=(1 8)
 workerThreadCount=(64)
 
 serverPort=11211
@@ -563,31 +453,6 @@ modeRatio=("1:10")
 
 multiGetMaxSize=(1 3 6 9)
 
-# memtier_benchmark --port=11211 --protocol=memcache_text --ratio=1:10 --multi-key-get=6 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=5 --clients=50 --threads=4
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    # POPULATE MEMCACHED SERVERS
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-    screen -d -m -S memtier1 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier2 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier3 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-
-    #WAIT WHILE MEMCACHED SERVERS ARE BEING POPULATED
-    sleep 60
-EOSSH
-) &
-done
-wait
-
-
-
 
 for c in "${virtualClientCount[@]}"; do
     for t in "${workerThreadCount[@]}"; do
@@ -603,7 +468,7 @@ for c in "${virtualClientCount[@]}"; do
                         sleep ${mwStartSafetyTime}
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                    ) &
+) &
                     done
                     wait
                     
@@ -617,8 +482,8 @@ EOSSH
                         screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
                         screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
 
-                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
-                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
                         
                         sleep $((${testTime}+${testSafetyTime}))
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -651,8 +516,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                    ) &
-                    done
+) &                 done
                     wait
                 done
             done
@@ -661,29 +525,18 @@ EOSSH
 done
 
 
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
-
-
+> Experiment_4_1.done
 
 
 experimentName="experiment4"
 partName="part2"
 
-IDservers=(6 7 8)
 IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(1 8) #1 8 16 24 32 64
-workerThreadCount=(32 64)  # or highest TP
+virtualClientCount=(1 8)
+workerThreadCount=(64)
 
 serverPort=11211
 middlewarePort=16399
@@ -695,29 +548,6 @@ modeRatio=("1:10")
 
 multiGetMaxSize=(1 3 6 9)
 
-# memtier_benchmark --port=11211 --protocol=memcache_text --ratio=1:10 --multi-key-get=6 --expiry-range=9999-10000 --key-maximum=1000 --hide-histogram --server 127.0.0.1 --test-time=5 --clients=50 --threads=4
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    # POPULATE MEMCACHED SERVERS
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-    screen -d -m -S memtier1 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier2 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier3 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    #WAIT WHILE MEMCACHED SERVERS ARE BEING POPULATED
-    sleep 60
-
-EOSSH
-) &
-done
-wait
-
 
 for c in "${virtualClientCount[@]}"; do
     for t in "${workerThreadCount[@]}"; do
@@ -734,12 +564,11 @@ for c in "${virtualClientCount[@]}"; do
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                    ) &
+) &
                     done
                     wait
 
                     
-
                     # part to control the clients
                     for IDc in "${IDclients[@]}"; do
                     (
@@ -749,8 +578,8 @@ EOSSH
                         screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
                         screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
 
-                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
-                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
                         
                         sleep $((${testTime}+${testSafetyTime}))
 
@@ -759,7 +588,7 @@ EOSSH
                     ) &
                     done
                     wait
-                    
+                   
 
 
                     # close middlewares
@@ -785,8 +614,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                    ) &
-                    done
+) &                 done
                     wait
                 done
             done
@@ -795,15 +623,7 @@ EOSSH
 done
 
 
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
+> Experiment_4_2.done
 
 
 
@@ -819,12 +639,11 @@ wait
 experimentName="experiment5"
 partName="part1_2s_1mw"
 
-IDservers=(6 7)
 IDmws=(4)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(32)
+virtualClientCount=(32)     # 64 clients per machine
 workerThreadCount=(8 32)
 
 serverPort=11211
@@ -832,23 +651,8 @@ middlewarePort=16399
 
 sharded="false"
 
-modeName=("writeonly" "readonly" "mixed")
-modeRatio=("1:0" "0:1" "1:1")
-
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
+modeName=("writeonly", "readonly", "50-50")
+modeRatio=("1:0", "0:1", "1:1")
 
 
 for c in "${virtualClientCount[@]}"; do
@@ -859,7 +663,7 @@ for c in "${virtualClientCount[@]}"; do
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw}+4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort}"
+                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort}"
                     # wait until middlewares are safely initialized
                     sleep ${mwStartSafetyTime}
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -910,7 +714,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                ) &             
+) &             
                 done
                 wait
             done
@@ -919,27 +723,18 @@ EOSSH
 done
 
 
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
+> Experiment_5_1.done
 
 
 
 experimentName="experiment5"
 partName="part2_2s_2mw"
 
-IDservers=(6 7)
 IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(32)
+virtualClientCount=(32)     # 64 clients per machine
 workerThreadCount=(8 32)
 
 serverPort=11211
@@ -947,23 +742,9 @@ middlewarePort=16399
 
 sharded="false"
 
-modeName=("writeonly" "readonly" "mixed")
-modeRatio=("1:0" "0:1" "1:1")
+modeName=("writeonly", "readonly", "50-50")
+modeRatio=("1:0", "0:1", "1:1")
 
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
 
 
 for c in "${virtualClientCount[@]}"; do
@@ -974,7 +755,7 @@ for c in "${virtualClientCount[@]}"; do
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw}+4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort}"
+                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort}"
                     # wait until middlewares are safely initialized
                     sleep ${mwStartSafetyTime}
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -1027,7 +808,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                ) &             
+) &             
                 done
                 wait
             done
@@ -1036,26 +817,17 @@ EOSSH
 done
 
 
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
+> Experiment_5_2.done
 
 
 experimentName="experiment5"
 partName="part3_3s_1mw"
 
-IDservers=(6 7 8)
 IDmws=(4)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(32)
+virtualClientCount=(32)     # 64 clients per machine
 workerThreadCount=(8 32)
 
 serverPort=11211
@@ -1063,23 +835,9 @@ middlewarePort=16399
 
 sharded="false"
 
-modeName=("writeonly" "readonly" "mixed")
-modeRatio=("1:0" "0:1" "1:1")
+modeName=("writeonly", "readonly", "50-50")
+modeRatio=("1:0", "0:1", "1:1")
 
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
 
 
 for c in "${virtualClientCount[@]}"; do
@@ -1090,7 +848,7 @@ for c in "${virtualClientCount[@]}"; do
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw}+4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort} ${prefix}${IDservers[2]}${suffix}:${serverPort}"
+                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort} ${prefix}${IDservers[2]}${suffix}:${serverPort}"
                     # wait until middlewares are safely initialized
                     sleep ${mwStartSafetyTime}
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -1141,7 +899,7 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                ) &             
+) &             
                 done
                 wait
             done
@@ -1149,33 +907,16 @@ EOSSH
     done
 done
 
-
-
-
-# close memcached at servers
-for IDs in "${IDservers[@]}"; do
-(
-    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
-) &
-done
-wait
-
-
-
-
-
-
-
+> Experiment_5_3.done
 
 experimentName="experiment5"
 partName="part4_3s_2mw"
 
-IDservers=(6 7 8)
 IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(32)
+virtualClientCount=(32)     # 64 clients per machine
 workerThreadCount=(8 32)
 
 serverPort=11211
@@ -1183,23 +924,8 @@ middlewarePort=16399
 
 sharded="false"
 
-modeName=("writeonly" "readonly" "mixed")
-modeRatio=("1:0" "0:1" "1:1")
-
-
-
-# part to control the server
-for IDs in "${IDservers[@]}"; do
-(
-    ssh ${prefix}${IDs}${suffix} << EOSSH 
-    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
-    #rm -f ${dirName}/*   # clear previous logs if necessary
-    
-    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-EOSSH
-) &
-done
-wait
+modeName=("writeonly", "readonly", "50-50")
+modeRatio=("1:0", "0:1", "1:1")
 
 
 
@@ -1211,7 +937,7 @@ for c in "${virtualClientCount[@]}"; do
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw}+4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort} ${prefix}${IDservers[2]}${suffix}:${serverPort}"
+                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort} ${prefix}${IDservers[2]}${suffix}:${serverPort}"
                     # wait until middlewares are safely initialized
                     sleep ${mwStartSafetyTime}
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -1264,13 +990,17 @@ EOSSH
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-                ) &             
+) &             
                 done
                 wait
             done
         done
     done
 done
+
+
+> Experiment_5_4.done
+
 
 
 
@@ -1282,6 +1012,89 @@ for IDs in "${IDservers[@]}"; do
 ) &
 done
 wait
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+remoteHome="/home/can"
+localpchome="/home/can/asl-experiments"
+
+prefix="canforaslvms"
+suffix=".westeurope.cloudapp.azure.com"
+
+dirName="asl-experiments"
+
+IDservers=(6 7 8)
+IDmws=(4 5)
+IDclients=(1 2 3)
+
+
+# rsync - trailing "/" copies the ocntents of the folder
+# GET CLIENT LOGS
+for IDc in "${IDclients[@]}"; do
+    rsync -avzhe ssh can@${prefix}${IDc}${suffix}:${remoteHome}/${dirName}/ ${localpchome}        # –remove-source-files
+done
+wait
+
+# GET MW LOGS
+for IDmw in "${IDmws[@]}"; do
+    rsync -avzhe ssh can@${prefix}${IDmw}${suffix}:${remoteHome}/${dirName}/ ${localpchome}
+done
+wait
+
+# GET SERVER LOGS
+for IDs in "${IDservers[@]}"; do
+    rsync -avzhe ssh can@${prefix}${IDs}${suffix}:${remoteHome}/${dirName}/ ${localpchome}
+done
+wait
+
+
+
+
+
+
+
+
+
+
+
+
+remoteHome="/home/can"
+
+prefix="canforaslvms"
+suffix=".westeurope.cloudapp.azure.com"
+
+dirName="asl-experiments"
+
+IDall=(1 2 3 4 5 6 7 8)
+
+# REMOVE ALL LOGS
+for IDa in "${IDall[@]}"; do
+(
+    ssh ${prefix}${IDa}${suffix} << EOSSH 
+    rm -rf ${remoteHome}/${dirName}/
+
+EOSSH
+) &
+done
+wait
+
+
+
+
+
+
 
 
 
