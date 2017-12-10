@@ -41,25 +41,22 @@ testSafetyTime=2
 mwLoggingSafetyTime=6
 
 
-experimentName="experiment3"
-partName="part1"
 
-IDservers=(6 7 8)
+experimentName="experiment2"
+partName="part3"
+
+IDservers=(6)
 IDmws=(4 5)
-IDclients=(1 2 3)
+IDclients=(1 2)
 
 memtierThreadCount=1
-virtualClientCount=(64)
-workerThreadCount=(64)
+virtualClientCount=(1 8 16 24 32 64 96)
+workerThreadCount=(8 16 32 64)
 
 serverPort=11211
 middlewarePort=16399
 
 sharded="false"
-
-modeName=("writeonly")
-modeRatio=("1:0")
-
 
 
 # part to control the server
@@ -75,27 +72,27 @@ EOSSH
 done
 wait
 
-# POPULATE MEMCACHED SERVERS IF NEEDED, HALT SCRIPT IN THE MEAN TIME
 
 
 for c in "${virtualClientCount[@]}"; do
     for t in "${workerThreadCount[@]}"; do
-        for modeIndex in {0..0}; do
+        for modeIndex in {0..1}; do
             for r in $(seq 1 $repeatCount); do
                 # part to control the middleware -- mw private IPs : machine4 - 10.0.0.8 , machine5- 10.0.0.9 (+4 from machine number -- coincidental)
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
-                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort} ${prefix}${IDservers[1]}${suffix}:${serverPort} ${prefix}${IDservers[2]}${suffix}:${serverPort}"
+                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}"
                     # wait until middlewares are safely initialized
                     sleep ${mwStartSafetyTime}
+
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
                 ) &
                 done
                 wait
 
-
+               
                 # part to control the clients
                 for IDc in "${IDclients[@]}"; do
                 (
@@ -115,7 +112,7 @@ EOSSH
                 ) &
                 done
                 wait
-                
+
 
                 # close middlewares
                 for IDmw in "${IDmws[@]}"; do
@@ -127,25 +124,25 @@ EOSSH
                 done
                 wait
 
+
                 for IDmw in "${IDmws[@]}"; do
                 (
                     ssh ${prefix}${IDmw}${suffix} << EOSSH 
                     mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
-                    
                     mv ${remoteHome}/${mwQueueFileName}.${mwQueueFileExtension} ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDmw}_${r}_${mwQueueFileName}.${mwQueueFileExtension}
-
                     mv ${remoteHome}/${mwRequestFileName}.${mwRequestFileExtension} ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDmw}_${r}_${mwRequestFileName}.${mwRequestFileExtension}
                     
 
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
 EOSSH
-) &             
+                ) &
                 done
                 wait
             done
         done
     done
 done
+
 
 
 
@@ -157,8 +154,6 @@ for IDs in "${IDservers[@]}"; do
 ) &
 done
 wait
-
-
 
 
 

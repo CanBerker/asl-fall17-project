@@ -403,6 +403,118 @@ done
 wait
 
 
+experimentName="experiment2"
+partName="part3"
+
+IDservers=(6)
+IDmws=(4 5)
+IDclients=(1 2)
+
+memtierThreadCount=1
+virtualClientCount=(1 8 16 24 32 64 96)
+workerThreadCount=(8 16 32 64)
+
+serverPort=11211
+middlewarePort=16399
+
+sharded="false"
+
+
+# part to control the server
+for IDs in "${IDservers[@]}"; do
+(
+    ssh ${prefix}${IDs}${suffix} << EOSSH 
+    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}
+    #rm -f ${dirName}/*   # clear previous logs if necessary
+    
+    screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
+EOSSH
+) &
+done
+wait
+
+
+
+for c in "${virtualClientCount[@]}"; do
+    for t in "${workerThreadCount[@]}"; do
+        for modeIndex in {0..1}; do
+            for r in $(seq 1 $repeatCount); do
+                # part to control the middleware -- mw private IPs : machine4 - 10.0.0.8 , machine5- 10.0.0.9 (+4 from machine number -- coincidental)
+                for IDmw in "${IDmws[@]}"; do
+                (
+                    ssh ${prefix}${IDmw}${suffix} << EOSSH 
+                    screen -d -m -S mw bash -c "java -jar ${remoteHome}/${dirNameMw}/dist/middleware-ccikis.jar -l 10.0.0.$((${IDmw} + 4)) -p ${middlewarePort} -t ${t} -s ${sharded} -m ${prefix}${IDservers[0]}${suffix}:${serverPort}"
+                    # wait until middlewares are safely initialized
+                    sleep ${mwStartSafetyTime}
+
+# EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
+EOSSH
+                ) &
+                done
+                wait
+
+               
+                # part to control the clients
+                for IDc in "${IDclients[@]}"; do
+                (
+                    ssh -T ${prefix}${IDc}${suffix} << EOSSH 
+                    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
+
+                    screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
+                    screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${pingFileName}.${pingFileExtension}"
+
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                    
+                    sleep $((${testTime}+${testSafetyTime}))
+
+# EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
+EOSSH
+                ) &
+                done
+                wait
+
+
+                # close middlewares
+                for IDmw in "${IDmws[@]}"; do
+                (
+                    { echo "shutdown"; } | telnet ${prefix}${IDmw}${suffix} ${middlewarePort}
+                    # wait for logs to be produced
+                    sleep ${mwLoggingSafetyTime}
+                ) &
+                done
+                wait
+
+
+                for IDmw in "${IDmws[@]}"; do
+                (
+                    ssh ${prefix}${IDmw}${suffix} << EOSSH 
+                    mkdir -p ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}
+                    mv ${remoteHome}/${mwQueueFileName}.${mwQueueFileExtension} ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDmw}_${r}_${mwQueueFileName}.${mwQueueFileExtension}
+                    mv ${remoteHome}/${mwRequestFileName}.${mwRequestFileExtension} ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDmw}_${r}_${mwRequestFileName}.${mwRequestFileExtension}
+                    
+
+# EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
+EOSSH
+                ) &
+                done
+                wait
+            done
+        done
+    done
+done
+
+
+
+
+
+# close memcached at servers
+for IDs in "${IDservers[@]}"; do
+(
+    { echo "shutdown"; } | telnet ${prefix}${IDs}${suffix} 11211
+) &
+done
+wait
 
 
 #################################################################################################################################################
@@ -617,8 +729,8 @@ EOSSH
                         screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
                         screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
 
-                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
-                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
                         
                         sleep $((${testTime}+${testSafetyTime}))
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -749,8 +861,8 @@ EOSSH
                         screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
                         screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
 
-                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
-                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
                         
                         sleep $((${testTime}+${testSafetyTime}))
 
