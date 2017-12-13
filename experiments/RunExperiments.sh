@@ -14,7 +14,8 @@ modeName=("writeonly" "readonly")
 modeRatio=("1:0" "0:1")
 
 expiryRange="9999-10000"
-keyMaximum=1000
+keyMaximum=10000
+dataSize=1024
 
 serverFileName="server"
 serverFileExtension="txt"
@@ -80,7 +81,7 @@ for c in "${virtualClientCount[@]}"; do
 
                 screen -d -m -S pinger_${IDs} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDservers[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[0]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                screen -d -m -S memtier_${IDs} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[0]}${suffix} --port=${serverPort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                screen -d -m -S memtier_${IDs} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[0]}${suffix} --port=${serverPort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[0]}_${r}_${reportFileName}.${reportFileExtension}"
          
                 sleep $((${testTime}+${testSafetyTime}))
 
@@ -143,8 +144,8 @@ for c in "${virtualClientCount[@]}"; do
                 screen -d -m -S pinger_${IDservers[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDservers[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[0]}_${r}_${pingFileName}.${pingFileExtension}"
                 screen -d -m -S pinger_${IDservers[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDservers[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[1]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                screen -d -m -S memtier_${IDservers[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[0]}${suffix} --port=${serverPort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[0]}_${r}_${reportFileName}.${reportFileExtension}"
-                screen -d -m -S memtier_${IDservers[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[1]}${suffix} --port=${serverPort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                screen -d -m -S memtier_${IDservers[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[0]}${suffix} --port=${serverPort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                screen -d -m -S memtier_${IDservers[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDservers[1]}${suffix} --port=${serverPort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${IDc}_${IDservers[1]}_${r}_${reportFileName}.${reportFileExtension}"
                 
                 sleep $((${testTime}+${testSafetyTime}))
 
@@ -237,7 +238,7 @@ EOSSH
 
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -349,8 +350,8 @@ EOSSH
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
                     screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
-                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -463,8 +464,8 @@ EOSSH
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
                     screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
-                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -589,8 +590,8 @@ EOSSH
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
                     screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
-                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -662,7 +663,7 @@ IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(1 8 16 24 32 64 96)
+virtualClientCount=(2)
 workerThreadCount=(64)
 
 serverPort=11211
@@ -687,9 +688,9 @@ for IDs in "${IDservers[@]}"; do
     
     # POPULATE MEMCACHED SERVERS
     screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-    screen -d -m -S memtier1 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier2 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier3 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
+    screen -d -m -S memtier1 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram"
+    screen -d -m -S memtier2 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram"
+    screen -d -m -S memtier3 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram"
 
     #WAIT WHILE MEMCACHED SERVERS ARE BEING POPULATED
     sleep 60
@@ -729,8 +730,8 @@ EOSSH
                         screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
                         screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
 
-                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
-                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
                         
                         sleep $((${testTime}+${testSafetyTime}))
 # EOSHH - heredoc tag should be on a seperate line by itself(without any leading or trailing spaces)
@@ -794,8 +795,8 @@ IDmws=(4 5)
 IDclients=(1 2 3)
 
 memtierThreadCount=1
-virtualClientCount=(1 8) #1 8 16 24 32 64
-workerThreadCount=(32 64)  # or highest TP
+virtualClientCount=(2) #1 8 16 24 32 64
+workerThreadCount=(64)  # or highest TP
 
 serverPort=11211
 middlewarePort=16399
@@ -819,9 +820,9 @@ for IDs in "${IDservers[@]}"; do
     
     # POPULATE MEMCACHED SERVERS
     screen -d -m -S memcached bash -c "memcached -A -v -p ${serverPort} > ${remoteHome}/${dirName}/${experimentName}/${partName}/${serverFileName}_${IDs}.${serverFileExtension}"
-    screen -d -m -S memtier1 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier2 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
-    screen -d -m -S memtier3 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram"
+    screen -d -m -S memtier1 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram"
+    screen -d -m -S memtier2 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram"
+    screen -d -m -S memtier3 bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=127.0.0.1 --port=${serverPort} --protocol=memcache_text --threads=2 --clients=128 --test-time=60 --ratio=1:0 --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram"
     #WAIT WHILE MEMCACHED SERVERS ARE BEING POPULATED
     sleep 60
 
@@ -861,8 +862,8 @@ EOSSH
                         screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
                         screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${pingFileName}.${pingFileExtension}"
 
-                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
-                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
+                        screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=1:${mgms} --multi-key-get=${mgms} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${mgms}_${r}_${reportFileName}.${reportFileExtension}"
                         
                         sleep $((${testTime}+${testSafetyTime}))
 
@@ -989,7 +990,7 @@ EOSSH
 
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -1105,8 +1106,8 @@ EOSSH
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
                     screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
-                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -1220,7 +1221,7 @@ EOSSH
 
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 
@@ -1342,8 +1343,8 @@ EOSSH
                     screen -d -m -S pinger_${IDmws[0]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[0]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${pingFileName}.${pingFileExtension}"
                     screen -d -m -S pinger_${IDmws[1]} bash -c "{ ping -w $((${testTime}+${pingSafetyTime})) -i ${pingInterval} ${prefix}${IDmws[1]}${suffix}; } > ${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${pingFileName}.${pingFileExtension}"
 
-                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
-                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[0]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[0]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[0]}_${r}_${reportFileName}.${reportFileExtension}"
+                    screen -d -m -S memtier_${IDmws[1]} bash -c "${remoteHome}/memtier_benchmark-master/memtier_benchmark --server=${prefix}${IDmws[1]}${suffix} --port=${middlewarePort} --protocol=memcache_text --threads=${memtierThreadCount} --clients=${c} --test-time=${testTime} --ratio=${modeRatio[$modeIndex]} --expiry-range=${expiryRange} --key-maximum=${keyMaximum} --data-size=${dataSize} --hide-histogram --out-file=${remoteHome}/${dirName}/${experimentName}/${partName}/${modeName[$modeIndex]}/${c}_${t}_${IDc}_${IDmws[1]}_${r}_${reportFileName}.${reportFileExtension}"
                     
                     sleep $((${testTime}+${testSafetyTime}))
 

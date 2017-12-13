@@ -13,7 +13,7 @@ dirNameMw="asl-fall17-project"
 modeName=("writeonly" "readonly")
 modeRatio=("1:0" "0:1")
 
-expiryRange="72000-72001"
+expiryRange="9999-10000"
 keyMaximum=10000
 dataSize=1024
 

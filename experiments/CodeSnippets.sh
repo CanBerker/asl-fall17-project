@@ -19,6 +19,10 @@ java -jar asl-fall17-project/dist/middleware-ccikis.jar -l 10.0.0.9 -p 16399 -t 
 
 memtier_benchmark --port=11211 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=1000 --server 127.0.0.1 --test-time=3 --clients=16 --threads=2
 
+memtier_benchmark --port=11211 --protocol=memcache_text --ratio=1:0 --expiry-range=9999-10000 --key-maximum=10000 --data-size=1024 --hide-histogram --server 127.0.0.1 --test-time=30 --clients=128 --threads=2
+
+memtier_benchmark --port=11211 --protocol=memcache_text --ratio=0:1 --expiry-range=9999-10000 --key-maximum=10000 --data-size=1024 --hide-histogram --server 127.0.0.1 --test-time=60 --clients=64 --threads=2
+
 
 
 
@@ -90,8 +94,9 @@ wait
 
 
 
+
 remoteHome="/home/can"
-localpchome="/home/can/can-test"
+localpchome="/media/sf_Ubuntu_Share/final-fix"
 
 prefix="canforaslvms"
 suffix=".westeurope.cloudapp.azure.com"
@@ -121,9 +126,6 @@ for IDs in "${IDservers[@]}"; do
     rsync -avzhe ssh can@${prefix}${IDs}${suffix}:${remoteHome}/${dirName}/ ${localpchome}
 done
 wait
-
-
-
 
 
 
